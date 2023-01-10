@@ -1,10 +1,9 @@
 module REPL where
 
 
-import           Control.Monad  (unless)
-import           Data.Either    (either)
+import           Control.Monad        (unless)
+import           Desugaring.Desugarer (ExprC)
 import           Farnsworth
-import           Parsing.Parser (ExprExt)
 import           System.IO
 
 repl :: IO ()
@@ -16,8 +15,8 @@ repl = do
 replRead :: IO String
 replRead = putStr "Farnsworth> " >> hFlush stdout >> getLine
 
-replEval :: String -> Either FWError ExprExt
+replEval :: String -> Either FWError ExprC
 replEval = run
 
-replPrint :: Either FWError ExprExt ->  IO ()
+replPrint :: Either FWError ExprC ->  IO ()
 replPrint e = either print print e

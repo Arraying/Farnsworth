@@ -4,9 +4,10 @@ module Farnsworth
     ) where
 
 import           Common
+import           Desugaring.Desugarer (ExprC, desugar)
 import           Errors
-import           Parsing.Parser (ExprExt, parseSExpr)
-import           Parsing.SExpr  (SExpr, parseStr)
+import           Parsing.Parser       (parseSExpr)
+import           Parsing.SExpr        (parseStr)
 
-run :: String -> Either FWError ExprExt
-run str = mapRight parseSExpr $ parseStr str
+run :: String -> Either FWError ExprC
+run str = mapRight desugar $ mapRight parseSExpr $ parseStr str
