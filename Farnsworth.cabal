@@ -25,6 +25,7 @@ source-repository head
 
 library
   exposed-modules:
+      Common
       Errors
       Farnsworth
       Parsing.Parser
@@ -42,6 +43,7 @@ library
 executable Farnsworth-exe
   main-is: Main.hs
   other-modules:
+      REPL
       Paths_Farnsworth
   hs-source-dirs:
       app
