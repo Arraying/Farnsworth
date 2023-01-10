@@ -46,7 +46,7 @@ sym = lexeme $ do
 list :: Parser SExpr
 list = do
   void $ lexeme $ Char.char '('
-  e <- Comb.many1 expr
+  e <- many expr
   void $ lexeme $ Char.char ')'
   return $ SList e
 

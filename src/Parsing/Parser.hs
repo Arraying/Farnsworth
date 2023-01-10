@@ -4,38 +4,37 @@ module Parsing.Parser
     ) where
 
 import           Common
-import           Errors
+import           Errors           (FWError (..))
+import           Parsing.Extended (ExprExt (..))
 import           Parsing.SExpr
 
-data ExprExt
-  = NumExt Integer
-  | NilExt
-  | TrueExt
-  | FalseExt
-  | UnOpExt String ExprExt
-  | BinOpExt String ExprExt ExprExt
-  | IfExt ExprExt ExprExt ExprExt
-  | ListExt [ExprExt]
-  deriving (Show)
-
--- TODO: Write parser.
 parseSExpr :: SExpr -> Either FWError ExprExt
 parseSExpr (SNum n) = Right $ NumExt n
 parseSExpr (SSym "Nil") = Right NilExt
 parseSExpr (SSym "True") = Right TrueExt
 parseSExpr (SSym "False") = Right FalseExt
-parseSExpr (SList [SSym "+", l, r]) = binop "+" l r
-parseSExpr (SList [SSym "-", l, r]) = binop "-" l r
-parseSExpr (SList [SSym "*", l, r]) = binop "*" l r
-parseSExpr (SList [SSym "/", l, r]) = binop "/" l r
-parseSExpr (SList [SSym "&&", l, r]) = binop "&&" l r
-parseSExpr (SList [SSym "||", l, r]) = binop "||" l r
-parseSExpr (SList [SSym "==", l, r]) = binop "==" l r
-parseSExpr (SList [SSym ">", l, r]) = binop ">" l r
-parseSExpr (SList [SSym "<", l, r]) = binop "<" l r
-parseSExpr (SList [SSym "if", c, t, f]) = Left $ FWSyntaxError "Not implemented" 
-parseSExpr (SList (SSym "list" : xs)) = Left $ FWSyntaxError "Not implemented" 
-parseSExpr _ = Left $ FWSyntaxError "Syntax error"
+parseSExpr (SSym s)
+  | s `notElem` reserved = Right $ IdExt s
+parseSExpr (SList [SSym s, e])
+  | s `elem` unOps = unOp s e
+parseSExpr (SList [SSym s, l, r])
+  | s `elem` binOps = binOp s l r
+parseSExpr (SList [SSym "if", c, t, f]) = case mapMany parseSExpr [c, t, f] of
+  Left e             -> Left e
+  Right [c', t', f'] -> Right $ IfExt c' t' f'
+  Right _            -> Left $ FWSyntaxError "Internal if-statement error"
+parseSExpr (SList (SSym "list" : xs)) = mapRight (\xs' -> Right $ ListExt xs') $ mapMany parseSExpr xs
+parseSExpr (SList [SSym "anon", SList a, b]) = mapRight (\a' -> mapRight (\b' -> Right $ AnonExt a' b') $ parseSExpr b) $ mapMany argParser a
+  where
+    argParser :: SExpr -> Either FWError String
+    argParser sexpr = mapRight (\s -> case s of
+      IdExt(s') -> Right s'
+      _ -> Left $ FWSyntaxError ("Anonymous lambda argument needs to be string; found " ++ (show sexpr))) $ parseSExpr sexpr
+parseSExpr (SList (x:xs)) = mapRight (\x' -> mapRight (\xs' -> Right $ AppExt x' xs') $ mapMany parseSExpr xs) $ parseSExpr x
+parseSExpr sexpr = Left $ FWSyntaxError $ show sexpr
 
-binop :: String -> SExpr -> SExpr -> Either FWError ExprExt
-binop s l r = mapRight (\(l', r') -> Right $ BinOpExt s l' r') $ mapBin parseSExpr (l, r)
+unOp :: String -> SExpr -> Either FWError ExprExt
+unOp s e = mapRight (\e' -> Right $ UnOpExt s e') $ parseSExpr e
+
+binOp :: String -> SExpr -> SExpr -> Either FWError ExprExt
+binOp s l r = mapRight (\(l', r') -> Right $ BinOpExt s l' r') $ mapBin parseSExpr (l, r)
