@@ -33,9 +33,12 @@ desugar (BinOpExt ">" l r) = binOp (\(l', r') -> GtC l' r') l r
 desugar (BinOpExt "<=" l r) = binOp (\(l', r') -> leq' l' r') l r
 desugar (BinOpExt ">=" l r) = binOp (\(l', r') -> geq' l' r') l r
 desugar (BinOpExt "cons" l r) = binOp (\(l', r') -> ConsC l' r') l r
-desugar (IfExt c t f) = Left $ FWDesugError "If does not yet desugar"
+desugar (IfExt c t f) = case mapMany desugar [c, t, f] of
+  Left e             -> Left e
+  Right [c', t', f'] -> Right $ IfC c' t' f'
+  Right _            -> Left $ FWDesugError "Internal if-statement error"
 desugar (ListExt xs) = mapRight (\xs' -> Right $ list xs') $ mapMany desugar xs
-desugar (AnonExt a b) = mapRight (\b -> Right $ curryLambda a b) $ desugar b
+desugar (AnonExt a b) = mapRight (\b' -> Right $ curryLambda a b') $ desugar b
 desugar (AppExt x xs) = mapRight (\x' -> mapRight (\xs' -> Right $ curryApplication x' xs') $ mapMany desugar xs) $ desugar x
 desugar e               = Left $ FWDesugError $ show e
 
