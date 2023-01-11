@@ -32,7 +32,6 @@ data ExprC
   | FalseC
   | IdC String
   | NegC ExprC
-  | NandC ExprC ExprC
   | ConsC ExprC ExprC
   | IfC ExprC ExprC ExprC
   | LambdaC (Maybe String) ExprC

@@ -22,11 +22,6 @@ treewalk (NegC e) env = mapRight neg' $ treewalk e env
   where
     neg' (NumV e') = Right $ NumV $ -e'
     neg' _         = Left $ FWInterpError "Negative requires a number"
-treewalk (NandC l r) env = binOp nand' l r env
-  where
-    nand' (BoolV True) (BoolV True) = Right $ BoolV False
-    nand' (BoolV _) (BoolV _) = Right $ BoolV True
-    nand' _ _ = Left $ FWInterpError "NAND requires LHS and RHS to be booleans"
 treewalk (ConsC l r) env = binOp (\l' r' -> Right $ ConsV l' r') l r env
 treewalk (IfC c t f) env = mapRight if' $ treewalk c env
   where
