@@ -43,10 +43,6 @@ treewalk (NandC l r) env = binOp nand' l r env
     nand' (BoolV True) (BoolV True) = Right $ BoolV False
     nand' (BoolV _) (BoolV _) = Right $ BoolV True
     nand' _ _ = Left $ FWInterpError "NAND requires LHS and RHS to be booleans"
-treewalk (PlusC l r) env = binOp plus l r env
-  where
-    plus (NumV l') (NumV r') = Right $ NumV $ l' + r'
-    plus _ _ = Left $ FWInterpError "Addition requires LHS and RHS to be numbers"
 treewalk (MultC l r) env = binOp mult l r env
   where
     mult (NumV l') (NumV r') = Right $ NumV $ l' * r'

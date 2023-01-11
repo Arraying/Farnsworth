@@ -30,7 +30,9 @@ library
       Desugaring.Lambdas
       Errors
       Farnsworth
+      Interpreting.Arithmetic
       Interpreting.Interpreter
+      Interpreting.NativeFunctions
       Interpreting.StandardLibrary
       Language
       Parsing.Parser

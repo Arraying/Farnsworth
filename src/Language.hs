@@ -36,7 +36,6 @@ data ExprC
   | IsNilC ExprC
   | IsListC ExprC
   | NandC ExprC ExprC
-  | PlusC ExprC ExprC
   | MultC ExprC ExprC
   | DivC ExprC ExprC
   | EqC ExprC ExprC
