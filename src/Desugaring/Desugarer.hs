@@ -4,8 +4,9 @@ module Desugaring.Desugarer
     ) where
 
 import           Common
+import           Desugaring.Lambdas (curryApplication, curryLambda, namedLambda)
 import           Errors
-import           Language (ExprC (..), ExprExt (..))
+import           Language           (ExprC (..), ExprExt (..))
 
 desugar :: ExprExt -> Either FWError ExprC
 desugar (NumExt n)      = Right $ NumC n
@@ -38,7 +39,7 @@ desugar (IfExt c t f) = case mapMany desugar [c, t, f] of
   Right _            -> Left $ FWDesugError "Internal if-statement error"
 desugar (ListExt xs) = mapRight (\xs' -> Right $ list xs') $ mapMany desugar xs
 desugar (AnonFnExt a b) = mapRight (\b' -> Right $ curryLambda a b') $ desugar b
-desugar (NamedFnExt s a b) = mapRight (\b' -> recFn s $ curryLambda a b') $ desugar b
+desugar (NamedFnExt s a b) = mapRight (\b' -> namedLambda s $ curryLambda a b') $ desugar b
 desugar (AppExt x xs) = mapRight (\x' -> mapRight (\xs' -> Right $ curryApplication x' xs') $ mapMany desugar xs) $ desugar x
 desugar e               = Left $ FWDesugError $ show e
 
@@ -51,16 +52,6 @@ binOp f l r = mapRight (\t -> Right $ f t) $ mapBin desugar (l, r)
 list :: [ExprC] -> ExprC
 list []     = NilC
 list (x:xs) = ConsC x $ list xs
-
-curryLambda :: [String] -> ExprC -> ExprC
-curryLambda [] b     = LambdaC Nothing b
-curryLambda [x] b    = LambdaC (Just x) b
-curryLambda (x:xs) b = LambdaC (Just x) $ curryLambda xs b
-
-curryApplication :: ExprC -> [ExprC] -> ExprC
-curryApplication f []     = AppC f Nothing
-curryApplication f [x]    = AppC f $ Just x
-curryApplication f (x:xs) = curryApplication (AppC f $ Just x) xs
 
 negative :: ExprC -> ExprC
 negative e = MultC (NumC (-1)) e
@@ -80,15 +71,4 @@ leq' l r = curryApplication (curryLambda ["l", "r"] $ or' (LtC (IdC "l") (IdC "r
 geq' :: ExprC -> ExprC -> ExprC
 geq' l r = curryApplication (curryLambda ["l", "r"] $ or' (GtC (IdC "l") (IdC "r")) (EqC (IdC "l") (IdC "r"))) [l, r]
 
-recFn :: String -> ExprC -> Either FWError ExprC
-recFn name (LambdaC a b) = Right $ AppC zCombinator $ Just $ LambdaC (Just name) $ LambdaC a b
-recFn _ _ = Left $ FWDesugError "Cannot z-combinate non lambda"
 
--- const Z = g => (x => g(v => x(x)(v)))(x => g(v => x(x)(v)))
-zCombinator :: ExprC
-zCombinator = LambdaC (Just "f") $ AppC innerFn (Just innerFn)
-  where
-    innerFn :: ExprC
-    innerFn = LambdaC (Just "x") $ AppC (IdC "f") (Just embeddedFn)
-    embeddedFn :: ExprC
-    embeddedFn = LambdaC (Just "v") (AppC (AppC (IdC "x") (Just $ IdC "x")) (Just $ IdC "v"))

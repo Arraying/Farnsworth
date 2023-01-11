@@ -27,6 +27,7 @@ library
   exposed-modules:
       Common
       Desugaring.Desugarer
+      Desugaring.Lambdas
       Errors
       Farnsworth
       Interpreting.Interpreter
