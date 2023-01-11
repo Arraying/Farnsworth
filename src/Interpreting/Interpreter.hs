@@ -27,18 +27,6 @@ treewalk (NandC l r) env = binOp nand' l r env
     nand' (BoolV True) (BoolV True) = Right $ BoolV False
     nand' (BoolV _) (BoolV _) = Right $ BoolV True
     nand' _ _ = Left $ FWInterpError "NAND requires LHS and RHS to be booleans"
-treewalk (EqC l r) env = binOp eq l r env
-  where
-    eq (NumV l') (NumV r') = Right $ BoolV $ l' == r'
-    eq _ _ = Left $ FWInterpError "Equals requires LHS and RHS to be numbers"
-treewalk (LtC l r) env = binOp lt l r env
-  where
-    lt (NumV l') (NumV r') = Right $ BoolV $ l' < r'
-    lt _ _ = Left $ FWInterpError "Less than requires LHS and RHS to be numbers"
-treewalk (GtC l r) env  = binOp gt l r env
-  where
-    gt (NumV l') (NumV r') = Right $ BoolV $ l' > r'
-    gt _ _ = Left $ FWInterpError "Greater than requires LHS and RHS to be numbers"
 treewalk (ConsC l r) env = binOp (\l' r' -> Right $ ConsV l' r') l r env
 treewalk (IfC c t f) env = mapRight if' $ treewalk c env
   where
@@ -59,14 +47,10 @@ treewalk (AppC f v) env = mapRight(\f' -> app f') $ treewalk f env
     prepApp (Just a) = mapRight (\a' -> Right $ Just a') $ treewalk a env
 treewalk (NativeC (EnvNativeFunction f)) env = f env
 
-
 bindResolve :: String -> Environment -> Either FWError Value
 bindResolve s env = case Map.lookup s env of
   Nothing -> Left $ FWInterpError ("Free variable: " ++ s)
   Just v  -> Right v
-
-unOp :: (Value -> Either FWError Value) -> ExprC -> Environment -> Either FWError Value
-unOp f expr env = mapRight f $ treewalk expr env
 
 binOp :: (Value -> Value -> Either FWError Value) -> ExprC -> ExprC -> Environment -> Either FWError Value
 binOp f l r env = mapRight (\l' -> mapRight (\r' -> f l' r') $ treewalk r env) $ treewalk l env

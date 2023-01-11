@@ -15,13 +15,7 @@ desugar TrueExt         = Right TrueC
 desugar FalseExt        = Right FalseC
 desugar (IdExt s)       = Right $ IdC s
 desugar (UnOpExt "-" e) = mapRight (\e' -> Right $ NegC e') $ desugar e
-desugar (BinOpExt "==" l r) = binOp (\(l', r') -> EqC l' r') l r
-desugar (BinOpExt "!=" l r) = binOp (\(l', r') -> not' $ EqC l' r') l r
-desugar (BinOpExt "<" l r) = binOp (\(l', r') ->  LtC l' r') l r
-desugar (BinOpExt ">" l r) = binOp (\(l', r') -> GtC l' r') l r
-desugar (BinOpExt "<=" l r) = binOp (\(l', r') -> leq' l' r') l r
-desugar (BinOpExt ">=" l r) = binOp (\(l', r') -> geq' l' r') l r
-desugar (BinOpExt "cons" l r) = binOp (\(l', r') -> ConsC l' r') l r
+desugar (BinOpExt "cons" l r) = mapRight (\(l', r') -> Right $ ConsC l' r') $ mapBin desugar (l, r)
 desugar (IfExt c t f) = case mapMany desugar [c, t, f] of
   Left e             -> Left e
   Right [c', t', f'] -> Right $ IfC c' t' f'
@@ -32,29 +26,6 @@ desugar (NamedFnExt s a b) = mapRight (\b' -> namedLambda s $ curryLambda a b') 
 desugar (AppExt x xs) = mapRight (\x' -> mapRight (\xs' -> Right $ curryApplication x' xs') $ mapMany desugar xs) $ desugar x
 desugar e               = Left $ FWDesugError $ show e
 
-binOp :: ((ExprC, ExprC) -> ExprC) -> ExprExt -> ExprExt -> Either FWError ExprC
-binOp f l r = mapRight (\t -> Right $ f t) $ mapBin desugar (l, r)
-
 list :: [ExprC] -> ExprC
 list []     = NilC
 list (x:xs) = ConsC x $ list xs
-
-negative :: ExprC -> ExprC
-negative e = MultC (NumC (-1)) e
-
-not' :: ExprC -> ExprC
-not' e = AppC (LambdaC (Just "e") (NandC (IdC "e") (IdC "e"))) $ Just e
-
-and' :: ExprC -> ExprC -> ExprC
-and' l r = curryApplication (curryLambda ["l", "r"] (NandC (NandC (IdC "l") (IdC "r")) (NandC (IdC "l") (IdC "r")))) [l, r]
-
-or' :: ExprC -> ExprC -> ExprC
-or' l r = curryApplication (curryLambda ["l", "r"] (NandC (NandC (IdC "l") (IdC "l")) (NandC (IdC "r") (IdC "r")))) [l, r]
-
-leq' :: ExprC -> ExprC -> ExprC
-leq' l r = curryApplication (curryLambda ["l", "r"] $ or' (LtC (IdC "l") (IdC "r")) (EqC (IdC "l") (IdC "r"))) [l, r]
-
-geq' :: ExprC -> ExprC -> ExprC
-geq' l r = curryApplication (curryLambda ["l", "r"] $ or' (GtC (IdC "l") (IdC "r")) (EqC (IdC "l") (IdC "r"))) [l, r]
-
-

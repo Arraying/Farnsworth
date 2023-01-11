@@ -33,11 +33,6 @@ data ExprC
   | IdC String
   | NegC ExprC
   | NandC ExprC ExprC
-  | MultC ExprC ExprC
-  | DivC ExprC ExprC
-  | EqC ExprC ExprC
-  | LtC ExprC ExprC
-  | GtC ExprC ExprC -- Can be optimized to LtC but this is a substantial investment.
   | ConsC ExprC ExprC
   | IfC ExprC ExprC ExprC
   | LambdaC (Maybe String) ExprC

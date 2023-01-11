@@ -25,4 +25,10 @@ standardLibraryEnvironment = Map.fromList
     , ("*", function2 multiply)
     , ("/", function2 divide)
     , ("&&", function2 and')
-    , ("||", function2 or') ]
+    , ("||", function2 or')
+    , ("==", function2 eq)
+    , ("!=", function2 neq)
+    , ("<", function2 lt)
+    , (">", function2 gt)
+    , ("<=", function2 lte)
+    , (">=", function2 gte) ]
