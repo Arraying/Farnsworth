@@ -24,14 +24,15 @@ parseSExpr (SList [SSym "if", c, t, f]) = case mapMany parseSExpr [c, t, f] of
   Right [c', t', f'] -> Right $ IfExt c' t' f'
   Right _            -> Left $ FWSyntaxError "Internal if-statement error"
 parseSExpr (SList (SSym "list" : xs)) = mapRight (\xs' -> Right $ ListExt xs') $ mapMany parseSExpr xs
-parseSExpr (SList [SSym "anon", SList a, b]) = mapRight (\a' -> mapRight (\b' -> Right $ AnonExt a' b') $ parseSExpr b) $ mapMany argParser a
-  where
-    argParser :: SExpr -> Either FWError String
-    argParser sexpr = mapRight (\s -> case s of
-      IdExt(s') -> Right s'
-      _ -> Left $ FWSyntaxError ("Anonymous lambda argument needs to be string; found " ++ (show sexpr))) $ parseSExpr sexpr
+parseSExpr (SList [SSym "anon", SList a, b]) = mapRight (\a' -> mapRight (\b' -> Right $ AnonFnExt a' b') $ parseSExpr b) $ mapMany argParser a
+parseSExpr (SList [SSym "fn", SSym s, SList a, b]) = mapRight (\a' -> mapRight (\b' -> Right $ NamedFnExt s a' b' ) $ parseSExpr b ) $ mapMany argParser a
 parseSExpr (SList (x:xs)) = mapRight (\x' -> mapRight (\xs' -> Right $ AppExt x' xs') $ mapMany parseSExpr xs) $ parseSExpr x
 parseSExpr sexpr = Left $ FWSyntaxError $ show sexpr
+
+argParser :: SExpr -> Either FWError String
+argParser sexpr = mapRight (\s -> case s of
+      IdExt(s') -> Right s'
+      _ -> Left $ FWSyntaxError ("Anonymous lambda argument needs to be string; found " ++ (show sexpr))) $ parseSExpr sexpr
 
 unOp :: String -> SExpr -> Either FWError ExprExt
 unOp s e = mapRight (\e' -> Right $ UnOpExt s e') $ parseSExpr e

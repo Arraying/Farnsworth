@@ -12,6 +12,7 @@ data ExprExt
   | BinOpExt String ExprExt ExprExt
   | IfExt ExprExt ExprExt ExprExt
   | ListExt [ExprExt]
-  | AnonExt [String] ExprExt
+  | AnonFnExt [String] ExprExt
+  | NamedFnExt String [String] ExprExt
   | AppExt ExprExt [ExprExt]
   deriving (Show)

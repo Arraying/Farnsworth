@@ -38,7 +38,8 @@ desugar (IfExt c t f) = case mapMany desugar [c, t, f] of
   Right [c', t', f'] -> Right $ IfC c' t' f'
   Right _            -> Left $ FWDesugError "Internal if-statement error"
 desugar (ListExt xs) = mapRight (\xs' -> Right $ list xs') $ mapMany desugar xs
-desugar (AnonExt a b) = mapRight (\b' -> Right $ curryLambda a b') $ desugar b
+desugar (AnonFnExt a b) = mapRight (\b' -> Right $ curryLambda a b') $ desugar b
+desugar (NamedFnExt s a b) = mapRight (\b' -> recFn s $ curryLambda a b') $ desugar b
 desugar (AppExt x xs) = mapRight (\x' -> mapRight (\xs' -> Right $ curryApplication x' xs') $ mapMany desugar xs) $ desugar x
 desugar e               = Left $ FWDesugError $ show e
 
@@ -79,3 +80,16 @@ leq' l r = curryApplication (curryLambda ["l", "r"] $ or' (LtC (IdC "l") (IdC "r
 
 geq' :: ExprC -> ExprC -> ExprC
 geq' l r = curryApplication (curryLambda ["l", "r"] $ or' (GtC (IdC "l") (IdC "r")) (EqC (IdC "l") (IdC "r"))) [l, r]
+
+recFn :: String -> ExprC -> Either FWError ExprC
+recFn name (LambdaC a b) = Right $ AppC zCombinator $ Just $ LambdaC (Just name) $ LambdaC a b
+recFn _ _ = Left $ FWDesugError "Cannot z-combinate non lambda"
+
+-- const Z = g => (x => g(v => x(x)(v)))(x => g(v => x(x)(v)))
+zCombinator :: ExprC
+zCombinator = LambdaC (Just "f") $ AppC innerFn (Just innerFn)
+  where
+    innerFn :: ExprC
+    innerFn = LambdaC (Just "x") $ AppC (IdC "f") (Just embeddedFn)
+    embeddedFn :: ExprC 
+    embeddedFn = LambdaC (Just "v") (AppC (AppC (IdC "x") (Just $ IdC "x")) (Just $ IdC "v"))
