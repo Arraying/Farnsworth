@@ -3,13 +3,11 @@ module Interpreting.StandardLibrary
     ) where
 
 import qualified Data.Map                     as Map
-import           Errors                       (FWError (..))
 import           Interpreting.Arithmetic
 import           Interpreting.Lists
 import           Interpreting.Logic
 import           Interpreting.NativeFunctions (function0, function1, function2)
-import           Language                     (Environment, ExprC (..),
-                                               NativeFunction (..), Value (..))
+import           Language                     (Environment, Value (..))
 
 standardLibraryEnvironment :: Environment
 standardLibraryEnvironment = Map.fromList
@@ -31,4 +29,5 @@ standardLibraryEnvironment = Map.fromList
     , ("<", function2 lt)
     , (">", function2 gt)
     , ("<=", function2 lte)
-    , (">=", function2 gte) ]
+    , (">=", function2 gte)
+    , ("cons_", function2 curriedCons) ]

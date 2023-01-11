@@ -1,5 +1,6 @@
 module Interpreting.Lists
-    ( head'
+    ( curriedCons
+    , head'
     , isList
     , isNil
     , tail'
@@ -27,3 +28,6 @@ isList :: Value -> Either FWError Value
 isList NilV        = Right $ BoolV True
 isList (ConsV _ _) = Right $ BoolV True
 isList _           = Right $ BoolV False
+
+curriedCons :: Value -> Value -> Either FWError Value
+curriedCons l r = Right $ ConsV l r
