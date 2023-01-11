@@ -1,10 +1,13 @@
 module Language
-    ( ExprC (..)
+    ( Environment
+    , ExprC (..)
     , ExprExt (..)
+    , NativeFunction (..)
     , Value (..)
     ) where
 
 import           Data.Map (Map)
+import           Errors   (FWError (..))
 
 -- The actual values.
 data Value
@@ -12,7 +15,7 @@ data Value
   | NilV
   | BoolV Bool
   | ConsV Value Value
-  | FunctionV ExprC (Map String Value)
+  | FunctionV ExprC Environment
 
 instance Show Value where
   show (NumV n)        = show n
@@ -43,7 +46,14 @@ data ExprC
   | IfC ExprC ExprC ExprC
   | LambdaC (Maybe String) ExprC
   | AppC ExprC (Maybe ExprC)
+  | NativeC NativeFunction
   deriving (Show)
+
+data NativeFunction
+  = EnvNativeFunction (Environment -> Either FWError Value)
+
+instance Show NativeFunction where
+  show (EnvNativeFunction _) = "<ENF>"
 
 -- The extended language syntax.
 data ExprExt
@@ -60,3 +70,5 @@ data ExprExt
   | NamedFnExt String [String] ExprExt
   | AppExt ExprExt [ExprExt]
   deriving (Show)
+
+type Environment = Map String Value

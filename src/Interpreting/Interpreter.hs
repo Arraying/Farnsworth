@@ -3,15 +3,16 @@ module Interpreting.Interpreter
     ) where
 
 import           Common
-import           Data.Map (Map)
-import qualified Data.Map as Map
+import qualified Data.Map                     as Map
 import           Errors
-import           Language (ExprC (..), Value (..))
+import           Interpreting.StandardLibrary (standardLibraryEnvironment)
+import           Language                     (Environment, ExprC (..),
+                                               NativeFunction (..), Value (..))
 
 interpret :: ExprC -> Either FWError Value
-interpret expr = treewalk expr $ Map.empty
+interpret expr = treewalk expr standardLibraryEnvironment
 
-treewalk :: ExprC -> Map String Value -> Either FWError Value
+treewalk :: ExprC -> Environment -> Either FWError Value
 treewalk (NumC n) _ = Right $ NumV n
 treewalk NilC _ = Right NilV
 treewalk TrueC _ = Right $ BoolV True
@@ -85,15 +86,16 @@ treewalk (AppC f v) env = mapRight(\f' -> app f') $ treewalk f env
     prepApp :: Maybe ExprC -> Either FWError (Maybe Value)
     prepApp Nothing  = Right Nothing
     prepApp (Just a) = mapRight (\a' -> Right $ Just a') $ treewalk a env
+treewalk (NativeC (EnvNativeFunction f)) env = f env
 
 
-bindResolve :: String -> Map String Value -> Either FWError Value
+bindResolve :: String -> Environment -> Either FWError Value
 bindResolve s env = case Map.lookup s env of
   Nothing -> Left $ FWInterpError ("Free variable: " ++ s)
   Just v  -> Right v
 
-unOp :: (Value -> Either FWError Value) -> ExprC -> Map String Value -> Either FWError Value
+unOp :: (Value -> Either FWError Value) -> ExprC -> Environment -> Either FWError Value
 unOp f expr env = mapRight f $ treewalk expr env
 
-binOp :: (Value -> Value -> Either FWError Value) -> ExprC -> ExprC -> Map String Value -> Either FWError Value
+binOp :: (Value -> Value -> Either FWError Value) -> ExprC -> ExprC -> Environment -> Either FWError Value
 binOp f l r env = mapRight (\l' -> mapRight (\r' -> f l' r') $ treewalk r env) $ treewalk l env
