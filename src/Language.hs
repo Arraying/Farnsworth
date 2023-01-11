@@ -31,6 +31,7 @@ data ExprC
   | TrueC
   | FalseC
   | IdC String
+  | NegC ExprC
   | HeadC ExprC
   | TailC ExprC
   | IsNilC ExprC

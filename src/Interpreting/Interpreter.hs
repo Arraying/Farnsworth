@@ -18,6 +18,10 @@ treewalk NilC _ = Right NilV
 treewalk TrueC _ = Right $ BoolV True
 treewalk FalseC _ = Right $ BoolV False
 treewalk (IdC s) env = bindResolve s env
+treewalk (NegC e) env = mapRight neg' $ treewalk e env
+  where
+    neg' (NumV e') = Right $ NumV $ -e'
+    neg' _         = Left $ FWInterpError "Negative requires a number"
 treewalk (HeadC v) env = unOp head' v env
   where
     head' (ConsV l _) = Right l
