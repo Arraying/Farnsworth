@@ -38,4 +38,4 @@ unOps :: [String]
 unOps = ["-"]
 
 binOps :: [String]
-binOps = ["*", "/", "==", "!=", "<", ">", "<=", ">=", "cons"]
+binOps = ["==", "!=", "<", ">", "<=", ">=", "cons"]

@@ -15,8 +15,6 @@ desugar TrueExt         = Right TrueC
 desugar FalseExt        = Right FalseC
 desugar (IdExt s)       = Right $ IdC s
 desugar (UnOpExt "-" e) = mapRight (\e' -> Right $ NegC e') $ desugar e
-desugar (BinOpExt "*" l r) = binOp (\(l', r') -> MultC l' r') l r
-desugar (BinOpExt "/" l r) = binOp (\(l', r') -> DivC l' r') l r
 desugar (BinOpExt "==" l r) = binOp (\(l', r') -> EqC l' r') l r
 desugar (BinOpExt "!=" l r) = binOp (\(l', r') -> not' $ EqC l' r') l r
 desugar (BinOpExt "<" l r) = binOp (\(l', r') ->  LtC l' r') l r

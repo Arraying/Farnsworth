@@ -27,15 +27,6 @@ treewalk (NandC l r) env = binOp nand' l r env
     nand' (BoolV True) (BoolV True) = Right $ BoolV False
     nand' (BoolV _) (BoolV _) = Right $ BoolV True
     nand' _ _ = Left $ FWInterpError "NAND requires LHS and RHS to be booleans"
-treewalk (MultC l r) env = binOp mult l r env
-  where
-    mult (NumV l') (NumV r') = Right $ NumV $ l' * r'
-    mult _ _ = Left $ FWInterpError "Multiplication requires LHS and RHS to be numbers"
-treewalk (DivC l r) env = binOp div' l r env
-  where
-    div' (NumV _) (NumV 0) = Left $ FWInterpError "Division by zero error"
-    div' (NumV l') (NumV r') = Right $ NumV $ l' `div` r'
-    div' _ _ = Left $ FWInterpError "Division requires LHS and RHS to be numbers"
 treewalk (EqC l r) env = binOp eq l r env
   where
     eq (NumV l') (NumV r') = Right $ BoolV $ l' == r'

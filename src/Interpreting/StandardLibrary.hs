@@ -5,7 +5,7 @@ module Interpreting.StandardLibrary
 import qualified Data.Map                     as Map
 import           Errors                       (FWError (..))
 import           Interpreting.Arithmetic
-import Interpreting.Lists (head', tail', isNil, isList)
+import           Interpreting.Lists
 import           Interpreting.Logic
 import           Interpreting.NativeFunctions (function0, function1, function2)
 import           Language                     (Environment, ExprC (..),
@@ -22,5 +22,7 @@ standardLibraryEnvironment = Map.fromList
     , ("list?", function1 isList)
     , ("+", function2 plus)
     , ("-", function2 minus)
+    , ("*", function2 multiply)
+    , ("/", function2 divide)
     , ("&&", function2 and')
     , ("||", function2 or') ]
