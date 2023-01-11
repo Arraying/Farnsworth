@@ -7,7 +7,7 @@ import           Common
 import           Desugaring.Desugarer     (desugar)
 import           Errors
 import           Interpreting.Interpreter (interpret)
-import           Interpreting.Value       (Value)
+import           Language                 (Value)
 import           Parsing.Parser           (parseSExpr)
 import           Parsing.SExpr            (parseStr)
 

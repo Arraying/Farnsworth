@@ -1,6 +1,6 @@
 cabal-version: 1.12
 
--- This file has been generated from package.yaml by hpack version 0.34.4.
+-- This file has been generated from package.yaml by hpack version 0.35.0.
 --
 -- see: https://github.com/sol/hpack
 
@@ -26,13 +26,11 @@ source-repository head
 library
   exposed-modules:
       Common
-      Desugaring.Core
       Desugaring.Desugarer
       Errors
       Farnsworth
       Interpreting.Interpreter
-      Interpreting.Value
-      Parsing.Extended
+      Language
       Parsing.Parser
       Parsing.SExpr
   other-modules:

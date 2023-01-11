@@ -3,11 +3,10 @@ module Interpreting.Interpreter
     ) where
 
 import           Common
-import           Data.Map           (Map)
-import qualified Data.Map           as Map
-import           Desugaring.Core    (ExprC (..))
+import           Data.Map (Map)
+import qualified Data.Map as Map
 import           Errors
-import           Interpreting.Value (Value (..))
+import           Language (ExprC (..), Value (..))
 
 interpret :: ExprC -> Either FWError Value
 interpret expr = treewalk expr $ Map.empty

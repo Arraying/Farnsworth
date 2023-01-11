@@ -4,9 +4,8 @@ module Desugaring.Desugarer
     ) where
 
 import           Common
-import           Desugaring.Core  (ExprC (..))
 import           Errors
-import           Parsing.Extended (ExprExt (..))
+import           Language (ExprC (..), ExprExt (..))
 
 desugar :: ExprExt -> Either FWError ExprC
 desugar (NumExt n)      = Right $ NumC n
@@ -91,5 +90,5 @@ zCombinator = LambdaC (Just "f") $ AppC innerFn (Just innerFn)
   where
     innerFn :: ExprC
     innerFn = LambdaC (Just "x") $ AppC (IdC "f") (Just embeddedFn)
-    embeddedFn :: ExprC 
+    embeddedFn :: ExprC
     embeddedFn = LambdaC (Just "v") (AppC (AppC (IdC "x") (Just $ IdC "x")) (Just $ IdC "v"))

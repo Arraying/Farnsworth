@@ -5,9 +5,9 @@ module REPL
     ) where
 
 
-import           Control.Monad      (unless)
+import           Control.Monad (unless)
 import           Farnsworth
-import           Interpreting.Value (Value)
+import           Language      (Value)
 import           System.IO
 
 repl :: IO ()

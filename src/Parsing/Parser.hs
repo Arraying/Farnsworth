@@ -4,8 +4,8 @@ module Parsing.Parser
     ) where
 
 import           Common
-import           Errors           (FWError (..))
-import           Parsing.Extended (ExprExt (..))
+import           Errors        (FWError (..))
+import           Language      (ExprExt (..))
 import           Parsing.SExpr
 
 parseSExpr :: SExpr -> Either FWError ExprExt
