@@ -15,10 +15,6 @@ desugar TrueExt         = Right TrueC
 desugar FalseExt        = Right FalseC
 desugar (IdExt s)       = Right $ IdC s
 desugar (UnOpExt "-" e) = mapRight (\e' -> Right $ NegC e') $ desugar e
-desugar (UnOpExt "head" e) = unOp (\e' -> HeadC e') e
-desugar (UnOpExt "tail" e) = unOp (\e' -> TailC e') e
-desugar (UnOpExt "nil?" e) = unOp (\e' -> IsNilC e') e
-desugar (UnOpExt "list?" e) = unOp (\e' -> IsListC e') e
 desugar (BinOpExt "*" l r) = binOp (\(l', r') -> MultC l' r') l r
 desugar (BinOpExt "/" l r) = binOp (\(l', r') -> DivC l' r') l r
 desugar (BinOpExt "==" l r) = binOp (\(l', r') -> EqC l' r') l r
@@ -37,9 +33,6 @@ desugar (AnonFnExt a b) = mapRight (\b' -> Right $ curryLambda a b') $ desugar b
 desugar (NamedFnExt s a b) = mapRight (\b' -> namedLambda s $ curryLambda a b') $ desugar b
 desugar (AppExt x xs) = mapRight (\x' -> mapRight (\xs' -> Right $ curryApplication x' xs') $ mapMany desugar xs) $ desugar x
 desugar e               = Left $ FWDesugError $ show e
-
-unOp :: (ExprC -> ExprC) -> ExprExt -> Either FWError ExprC
-unOp f e = mapRight (\e' -> Right $ f e') $ desugar e
 
 binOp :: ((ExprC, ExprC) -> ExprC) -> ExprExt -> ExprExt -> Either FWError ExprC
 binOp f l r = mapRight (\t -> Right $ f t) $ mapBin desugar (l, r)

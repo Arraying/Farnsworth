@@ -35,7 +35,7 @@ reserved :: [String]
 reserved = unOps ++ binOps ++ ["if", "list", "anon"]
 
 unOps :: [String]
-unOps = ["-", "head", "tail", "nil?", "list?"]
+unOps = ["-"]
 
 binOps :: [String]
 binOps = ["*", "/", "==", "!=", "<", ">", "<=", ">=", "cons"]

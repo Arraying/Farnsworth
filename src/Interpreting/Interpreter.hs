@@ -22,26 +22,6 @@ treewalk (NegC e) env = mapRight neg' $ treewalk e env
   where
     neg' (NumV e') = Right $ NumV $ -e'
     neg' _         = Left $ FWInterpError "Negative requires a number"
-treewalk (HeadC v) env = unOp head' v env
-  where
-    head' (ConsV l _) = Right l
-    head' NilV        = Left $ FWInterpError "Cannot determined head of Nil"
-    head' _           = Left $ FWInterpError "Cannot determine head of non-list"
-treewalk (TailC v) env = unOp tail' v env
-  where
-    tail' (ConsV _ r) = Right r
-    tail' NilV        = Left $ FWInterpError "Cannot determined head of Nil"
-    tail' _           = Left $ FWInterpError "Cannot determine head of non-list"
-treewalk (IsNilC v) env = unOp isNil v env
-  where
-    isNil NilV = Right $ BoolV True
-    isNil (ConsV _ _) = Right $ BoolV False
-    isNil _ = Left $ FWInterpError "Cannot determine if nil of non-list"
-treewalk (IsListC v) env = unOp isList v env
-  where
-    isList NilV        = Right $ BoolV True
-    isList (ConsV _ _) = Right $ BoolV True
-    isList _           = Right $ BoolV False
 treewalk (NandC l r) env = binOp nand' l r env
   where
     nand' (BoolV True) (BoolV True) = Right $ BoolV False

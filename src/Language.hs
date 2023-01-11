@@ -32,10 +32,6 @@ data ExprC
   | FalseC
   | IdC String
   | NegC ExprC
-  | HeadC ExprC
-  | TailC ExprC
-  | IsNilC ExprC
-  | IsListC ExprC
   | NandC ExprC ExprC
   | MultC ExprC ExprC
   | DivC ExprC ExprC
