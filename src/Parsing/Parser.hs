@@ -24,7 +24,7 @@ parseSExpr (SList [SSym "if", c, t, f]) = case mapMany parseSExpr [c, t, f] of
   Right [c', t', f'] -> Right $ IfExt c' t' f'
   Right _            -> Left $ FWSyntaxError "Internal if-statement error"
 parseSExpr (SList (SSym "list" : xs)) = mapRight (\xs' -> Right $ ListExt xs') $ mapMany parseSExpr xs
-parseSExpr (SList [SSym "anon", SList a, b]) = mapRight (\a' -> mapRight (\b' -> Right $ AnonFnExt a' b') $ parseSExpr b) $ mapMany argParser a
+parseSExpr (SList [SSym "\\", SList a, b]) = mapRight (\a' -> mapRight (\b' -> Right $ AnonFnExt a' b') $ parseSExpr b) $ mapMany argParser a
 parseSExpr (SList [SSym "fn", SSym s, SList a, b]) = mapRight (\a' -> mapRight (\b' -> Right $ NamedFnExt s a' b' ) $ parseSExpr b ) $ mapMany argParser a
 parseSExpr (SList (x:xs)) = mapRight (\x' -> mapRight (\xs' -> Right $ AppExt x' xs') $ mapMany parseSExpr xs) $ parseSExpr x
 parseSExpr sexpr = Left $ FWSyntaxError $ show sexpr

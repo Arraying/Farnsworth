@@ -32,7 +32,7 @@ mapMany f (x:xs) = case f x of
     Right y' -> Right $ x' : y'
 
 reserved :: [String]
-reserved = unOps ++ binOps ++ ["if", "list", "anon"]
+reserved = unOps ++ binOps ++ ["if", "list", "\\", "fn"]
 
 unOps :: [String]
 unOps = ["-"]

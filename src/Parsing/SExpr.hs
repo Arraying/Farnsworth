@@ -41,7 +41,7 @@ sym = lexeme $ do
   where
     headParse = Char.satisfy allowed
     tailParse = Char.satisfy (\a -> isDigit a || allowed a)
-    allowed a = isLetter a || elem a "!$%^&*-_=+;:@'#~|<>/"
+    allowed a = isLetter a || elem a "!$%^&*-_=+;:@'#~|<>/\\"
 
 list :: Parser SExpr
 list = do
