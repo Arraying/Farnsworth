@@ -1,0 +1,10 @@
+(
+  (fn map (f l)
+    (if (nil? l)
+      Nil
+      (cons (f (head l)) (doubleList (tail l)))
+    )
+  )
+  (\ (x) (* 2 x))
+  (list 1 2 3 4 5)
+)
