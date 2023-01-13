@@ -3,6 +3,7 @@ module Language
     , ExprC (..)
     , ExprExt (..)
     , NativeFunction (..)
+    , Stricter
     , Value (..)
     ) where
 
@@ -16,6 +17,7 @@ data Value
   | BoolV Bool
   | ConsV Value Value
   | FunctionV ExprC Environment
+  | ThunkV ExprC Environment
 
 instance Show Value where
   show (NumV n)        = show n
@@ -23,6 +25,7 @@ instance Show Value where
   show (BoolV b)       = show b
   show (ConsV l r)     = (show l) ++ " : " ++ (show r)
   show (FunctionV _ _) = "Function"
+  show (ThunkV _ _)    = "Thunk"
 
 -- The core language syntax.
 data ExprC
@@ -40,6 +43,7 @@ data ExprC
   deriving (Show)
 
 data NativeFunction
+  -- Environment will always contain stricted values.
   = EnvNativeFunction (Environment -> Either FWError Value)
 
 instance Show NativeFunction where
@@ -62,3 +66,4 @@ data ExprExt
   deriving (Show)
 
 type Environment = Map String Value
+type Stricter = (Value -> Either FWError Value)

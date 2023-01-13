@@ -7,27 +7,31 @@ import           Interpreting.Arithmetic
 import           Interpreting.Lists
 import           Interpreting.Logic
 import           Interpreting.NativeFunctions (function0, function1, function2)
-import           Language                     (Environment, Value (..))
+import           Language                     (Environment, Stricter,
+                                               Value (..))
 
-standardLibraryEnvironment :: Environment
-standardLibraryEnvironment = Map.fromList
+standardLibraryEnvironment :: Stricter -> Environment
+standardLibraryEnvironment strict = Map.fromList
     [ ("best-number", function0 $ Right $ NumV 19) -- My favourite number!
-    , ("id", function1 (\x -> Right x))
-    , ("!", function1 not')
-    , ("head", function1 head')
-    , ("tail", function1 tail')
-    , ("nil?", function1 isNil)
-    , ("list?", function1 isList)
-    , ("+", function2 plus)
-    , ("-", function2 minus)
-    , ("*", function2 multiply)
-    , ("/", function2 divide)
-    , ("&&", function2 and')
-    , ("||", function2 or')
-    , ("==", function2 eq)
-    , ("!=", function2 neq)
-    , ("<", function2 lt)
-    , (">", function2 gt)
-    , ("<=", function2 lte)
-    , (">=", function2 gte)
-    , ("cons_", function2 curriedCons) ]
+    , ("id", f1 (\x -> Right x))
+    , ("!", f1 not')
+    , ("head", f1 head')
+    , ("tail", f1 tail')
+    , ("nil?", f1 isNil)
+    , ("list?", f1 isList)
+    , ("+", f2 plus)
+    , ("-", f2 minus)
+    , ("*", f2 multiply)
+    , ("/", f2 divide)
+    , ("&&", f2 and')
+    , ("||", f2 or')
+    , ("==", f2 eq)
+    , ("!=", f2 neq)
+    , ("<", f2 lt)
+    , (">", f2 gt)
+    , ("<=", f2 lte)
+    , (">=", f2 gte)
+    , ("cons_", f2 curriedCons) ]
+  where
+    f1 = function1 strict
+    f2 = function2 strict
