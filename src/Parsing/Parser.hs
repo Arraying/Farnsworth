@@ -14,7 +14,7 @@ parseSExpr (SSym "Nil") = Right NilExt
 parseSExpr (SSym "True") = Right TrueExt
 parseSExpr (SSym "False") = Right FalseExt
 parseSExpr (SSym s)
-  | s `notElem` reserved = Right $ IdExt s
+  | s `notElem` reserved || s == "-" = Right $ IdExt s
 parseSExpr (SList [SSym s, e])
   | s `elem` unOps = unOp s e
 parseSExpr (SList [SSym s, l, r])
