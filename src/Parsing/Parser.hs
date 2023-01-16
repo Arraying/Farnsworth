@@ -47,6 +47,8 @@ parseSExpr (SList (x:xs)) = do
 parseSExpr sexpr = Left $ FWSyntaxError $ show sexpr
 
 argParser :: SExpr -> Either FWError String
-argParser sexpr = mapRight (\s -> case s of
-      IdExt(s') -> Right s'
-      _ -> Left $ FWSyntaxError ("Anonymous lambda argument needs to be string; found " ++ (show sexpr))) $ parseSExpr sexpr
+argParser sexpr = do
+  s <- parseSExpr sexpr
+  case s of
+    IdExt(s') -> Right s'
+    _ -> Left $ FWSyntaxError ("Anonymous lambda argument needs to be string; found " ++ (show sexpr))
