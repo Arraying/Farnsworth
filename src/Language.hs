@@ -5,9 +5,9 @@ module Language
     , NativeFunction (..)
     , Stricter
     , Value (..)
+    , binOps
     , reserved
     , unOps
-    , binOps 
     ) where
 
 import           Data.Map (Map)

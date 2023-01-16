@@ -3,7 +3,6 @@ module Desugaring.Desugarer
     , desugar
     ) where
 
-import           Common
 import           Desugaring.Lambdas (curryApplication, curryLambda, namedLambda)
 import           Errors
 import           Language           (ExprC (..), ExprExt (..))
@@ -27,7 +26,7 @@ desugar (IfExt c t f) = do
   f' <- desugar f
   Right $ IfC c' t' f'
 desugar (ListExt xs) = do
-  xs' <- mapMany desugar xs
+  xs' <- traverse desugar xs
   Right $ list xs'
 desugar (AnonFnExt a b) = do
   b' <- desugar b
@@ -37,7 +36,7 @@ desugar (NamedFnExt s a b) = do
   namedLambda s c
 desugar (AppExt x xs) = do
   x' <- desugar x
-  xs' <- mapMany desugar xs
+  xs' <- traverse desugar xs
   Right $ curryApplication x' xs'
 desugar e               = Left $ FWDesugError $ show e
 

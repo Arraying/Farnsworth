@@ -25,7 +25,6 @@ source-repository head
 
 library
   exposed-modules:
-      Common
       Desugaring.Desugarer
       Desugaring.Lambdas
       Errors

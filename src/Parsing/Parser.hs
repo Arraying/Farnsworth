@@ -3,9 +3,8 @@ module Parsing.Parser
     , parseSExpr
     ) where
 
-import Common (mapMany)
 import           Errors        (FWError (..))
-import           Language      (ExprExt (..), reserved, unOps, binOps)
+import           Language      (ExprExt (..), binOps, reserved, unOps)
 import           Parsing.SExpr
 
 parseSExpr :: SExpr -> Either FWError ExprExt
@@ -30,19 +29,19 @@ parseSExpr (SList [SSym "if", c, t, f]) = do
   f' <- parseSExpr f
   Right $ IfExt c' t' f'
 parseSExpr (SList (SSym "list" : xs)) = do
-  xs' <- mapMany parseSExpr xs
+  xs' <- traverse parseSExpr xs
   Right $ ListExt xs'
 parseSExpr (SList [SSym "\\", SList a, b]) = do
-  a' <- mapMany argParser a
+  a' <- traverse argParser a
   b' <- parseSExpr b
   Right $ AnonFnExt a' b'
 parseSExpr (SList [SSym "fn", SSym s, SList a, b]) = do
-  a' <- mapMany argParser a
+  a' <- traverse argParser a
   b' <- parseSExpr b
   Right $ NamedFnExt s a' b'
 parseSExpr (SList (x:xs)) = do
   x' <- parseSExpr x
-  xs' <- mapMany parseSExpr xs
+  xs' <- traverse parseSExpr xs
   Right $ AppExt x' xs'
 parseSExpr sexpr = Left $ FWSyntaxError $ show sexpr
 

@@ -42,7 +42,7 @@ treewalk (AppC a b) env = do
     x                                -> Left $ FWInterpError ("Cannot invoke as function: " ++ (show x))
   where
     arg :: Maybe ExprC -> Either FWError (Maybe Value)
-    arg Nothing = Right Nothing
+    arg Nothing    = Right Nothing
     arg (Just b'') = Right $ Just $ ThunkV b'' env
 treewalk (NativeC (EnvNativeFunction f)) env = f env
 
