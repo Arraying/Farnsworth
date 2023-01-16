@@ -3,9 +3,9 @@ module Parsing.Parser
     , parseSExpr
     ) where
 
-import           Common
+import Common (mapMany)
 import           Errors        (FWError (..))
-import           Language      (ExprExt (..))
+import           Language      (ExprExt (..), reserved, unOps, binOps)
 import           Parsing.SExpr
 
 parseSExpr :: SExpr -> Either FWError ExprExt

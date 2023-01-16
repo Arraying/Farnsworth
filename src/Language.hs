@@ -5,6 +5,9 @@ module Language
     , NativeFunction (..)
     , Stricter
     , Value (..)
+    , reserved
+    , unOps
+    , binOps 
     ) where
 
 import           Data.Map (Map)
@@ -67,3 +70,12 @@ data ExprExt
 
 type Environment = Map String Value
 type Stricter = (Value -> Either FWError Value)
+
+reserved :: [String]
+reserved = unOps ++ binOps ++ ["if", "list", "\\", "fn"]
+
+unOps :: [String]
+unOps = ["-"]
+
+binOps :: [String]
+binOps = ["cons"]
