@@ -3,6 +3,7 @@ module Language
     , ExprC (..)
     , ExprExt (..)
     , NativeFunction (..)
+    , Pat (..)
     , Stricter
     , Value (..)
     , binOps
@@ -40,6 +41,7 @@ data ExprC
   | NegC ExprC
   | ConsC ExprC ExprC
   | IfC ExprC ExprC ExprC
+  | MatchC ExprC [(Pat, ExprC)]
   | LambdaC (Maybe String) ExprC
   | AppC ExprC (Maybe ExprC)
   | NativeC NativeFunction
@@ -63,16 +65,26 @@ data ExprExt
   | BinOpExt String ExprExt ExprExt
   | IfExt ExprExt ExprExt ExprExt
   | ListExt [ExprExt]
+  | MatchExt ExprExt [(Pat, ExprExt)]
   | AnonFnExt [String] ExprExt
   | NamedFnExt String [String] ExprExt
   | AppExt ExprExt [ExprExt]
+  deriving (Show)
+
+data Pat
+  = NumP Integer
+  | TrueP
+  | FalseP
+  | NilP
+  | ConsP Pat Pat
+  | IdP String
   deriving (Show)
 
 type Environment = Map String Value
 type Stricter = (Value -> Either FWError Value)
 
 reserved :: [String]
-reserved = unOps ++ binOps ++ ["if", "list", "\\", "fn"]
+reserved = unOps ++ binOps ++ ["if", "list", "\\", "fn", "match", "case"]
 
 unOps :: [String]
 unOps = ["-"]

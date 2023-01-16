@@ -5,7 +5,7 @@ module Desugaring.Desugarer
 
 import           Desugaring.Lambdas (curryApplication, curryLambda, namedLambda)
 import           Errors
-import           Language           (ExprC (..), ExprExt (..))
+import           Language           (ExprC (..), ExprExt (..), Pat)
 
 desugar :: ExprExt -> Either FWError ExprC
 desugar (NumExt n)      = Right $ NumC n
@@ -28,6 +28,15 @@ desugar (IfExt c t f) = do
 desugar (ListExt xs) = do
   xs' <- traverse desugar xs
   Right $ list xs'
+desugar (MatchExt x xs) = do
+  x' <- desugar x
+  xs' <- traverse desugarCase xs
+  Right $ MatchC x' xs'
+  where
+    desugarCase :: (Pat, ExprExt) -> Either FWError (Pat, ExprC)
+    desugarCase (p, e) = do
+      e' <- desugar e
+      Right $ (p, e')
 desugar (AnonFnExt a b) = do
   b' <- desugar b
   Right $ curryLambda a b'

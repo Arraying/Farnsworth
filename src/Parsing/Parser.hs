@@ -4,7 +4,7 @@ module Parsing.Parser
     ) where
 
 import           Errors        (FWError (..))
-import           Language      (ExprExt (..), binOps, reserved, unOps)
+import           Language      (ExprExt (..), Pat (..), binOps, reserved, unOps)
 import           Parsing.SExpr
 
 parseSExpr :: SExpr -> Either FWError ExprExt
@@ -31,6 +31,28 @@ parseSExpr (SList [SSym "if", c, t, f]) = do
 parseSExpr (SList (SSym "list" : xs)) = do
   xs' <- traverse parseSExpr xs
   Right $ ListExt xs'
+parseSExpr (SList (SSym "match" : x : xs)) = do
+  x' <- parseSExpr x
+  xs' <- traverse parseCase xs
+  Right $ MatchExt x' xs'
+  where
+    parseCase :: SExpr -> Either FWError (Pat, ExprExt)
+    parseCase (SList [SSym "case", p, e]) = do
+      p' <- parsePat p
+      e' <- parseSExpr e
+      Right (p', e')
+    parseCase c                           = Left $ FWSyntaxError ("Malformed case: " ++ (show c))
+    parsePat :: SExpr -> Either FWError Pat
+    parsePat (SNum n)                 = Right $ NumP n
+    parsePat (SSym "True")            = Right TrueP
+    parsePat (SSym "False")           = Right FalseP
+    parsePat (SSym "Nil")             = Right NilP
+    parsePat (SList [h, SSym ":", t]) = do
+      h' <- parsePat h
+      t' <- parsePat t
+      Right $ ConsP h' t'
+    parsePat (SSym s) = Right $ IdP s
+    parsePat pat = Left $ FWSyntaxError $ show pat
 parseSExpr (SList [SSym "\\", SList a, b]) = do
   a' <- traverse argParser a
   b' <- parseSExpr b

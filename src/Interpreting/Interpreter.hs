@@ -6,7 +6,8 @@ import qualified Data.Map                     as Map
 import           Errors
 import           Interpreting.StandardLibrary (standardLibraryEnvironment)
 import           Language                     (Environment, ExprC (..),
-                                               NativeFunction (..), Value (..))
+                                               NativeFunction (..), Pat (..),
+                                               Value (..))
 
 interpret :: ExprC -> Either FWError Value
 interpret expr = treewalk expr (standardLibraryEnvironment strict) >>= strict
@@ -29,6 +30,36 @@ treewalk (IfC c t f) env = do
     (BoolV True)  -> treewalk t env
     (BoolV False) -> treewalk f env
     _ -> Left $ FWInterpError "If-statement condition must evaluate to a boolean"
+treewalk (MatchC u xs) env = do
+  u' <- treewalk u env >>= strict
+  findCase u' xs
+  where
+    findCase :: Value -> [(Pat, ExprC)] -> Either FWError Value
+    findCase _ []            = Left $ FWInterpError "Non-exhaustive cases"
+    findCase u' ((p, e):xs') = do
+      m <- match env u' p
+      case m of
+        (Just env') -> treewalk e env'
+        Nothing     -> findCase u' xs'
+    match :: Environment -> Value -> Pat -> Either FWError (Maybe Environment)
+    match env' u' pat = case (pat, u') of
+      (NumP l, NumV r)         -> if (l == r) then noChange else Right Nothing
+      (TrueP, BoolV True)      -> noChange
+      (FalseP, BoolV False)    -> noChange
+      (NilP, NilV)             -> noChange
+      (IdP s, _)               -> Right $ Just $ Map.insert s u' env'
+      (ConsP h t, ConsV h' t') -> do
+        h'' <- strict h'
+        t'' <- strict t'
+        l <- match env' h'' h
+        r <- match env' t'' t
+        case (l, r) of
+          (Just l', Just r') -> Right $ Just $ Map.union (Map.union r' l') env'
+          (_, _)             -> Right $ Nothing
+      (_, _)                   -> Right Nothing
+      where
+        noChange :: Either FWError (Maybe Environment)
+        noChange = Right $ Just env'
 treewalk fn@(LambdaC _ _) env = Right $ FunctionV fn env
 treewalk (AppC a b) env = do
   f <- treewalk a env >>= strict
