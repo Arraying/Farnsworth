@@ -264,6 +264,43 @@ Coming back to lists, `Thunk : Thunk` is not particularly useful output. In orde
 The standard libary is so minimal it should probably be called a standard bookshelf.
 I plan on expanding it, eventually, but until then there's really just the basics.
 Since the language is quite concise and powerful, having to write your own functions shouldn't be too bad.
+As a reminder, all functions can be curried.
+
+**Arity 0 Functions:**
+| Name | Return Type | Description |
+| --- | --- | --- |
+| `best-number` | number | Returns `19`. |
+
+**Arity 1 Functions:**
+
+| Name | Type | Return Type | Description | 
+| --- | --- | --- | --- |
+| `id` | any | any | Returns the argument. |
+| `!` | boolean | boolean | Logical NOT. |
+| `force` | list | list | Forces a list (see above). |
+| `head` | nonempty list | any | Returns the head of the list. |
+| `tail` | nonempty list | any | Returns the tail of the list. |
+| `nil?` | list | boolean | Returns true iff the list is empty. |
+| `list?` | any | boolean | Returns true iff the argument is a list. |
+
+**Arity 2 Functions:**
+
+| Name | Left Type | Right Type | Return Type | Description | 
+| --- | --- | --- | --- | --- |
+| `+` | number | number | number | Addition. | 
+| `-` | number | number | number | Subtraction. | 
+| `*` | number | number | number | Multiplication. | 
+| `/` | number | number | number | Integer (floor) division. | 
+| `&&` | boolean | boolean | boolean | Logical AND. |
+| `\|\|` | boolean | boolean | boolean | Logical OR. |
+| `==` | boolean/number | boolean/number | boolean | Whether the two booleans/numbers are equal. |
+| `!=` | boolean/number | boolean/number | boolean | Whether the two booleans/numbers are not equal. |
+| `<` | number | number | boolean | Whether LHS < RHS. |
+| `>` | number | number | boolean | Whether LHS > RHS. |
+| `<=` | number | number | boolean | Whether LHS <= RHS. |
+| `>=` | number | number | boolean | Whether LHS >= RHS. |
+| `cons_` | any | nil or list | list | Curried version of `cons`. |
+
 
 ## Conventions
 
