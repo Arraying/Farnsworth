@@ -1,0 +1,7 @@
+(match (list 1 2 3)
+  (case 1 1)
+  (case True 2)
+  (case False 3)
+  (case Nil 4)
+  (case (cons h _) (+ h 100))
+  (case x (head x)))
