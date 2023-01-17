@@ -43,11 +43,11 @@ parseSExpr (SList (SSym "match" : x : xs)) = do
       Right (p', e')
     parseCase c                           = Left $ FWSyntaxError ("Malformed case: " ++ (show c))
     parsePat :: SExpr -> Either FWError Pat
-    parsePat (SNum n)                 = Right $ NumP n
-    parsePat (SSym "True")            = Right TrueP
-    parsePat (SSym "False")           = Right FalseP
-    parsePat (SSym "Nil")             = Right NilP
-    parsePat (SList [h, SSym ":", t]) = do
+    parsePat (SNum n)                    = Right $ NumP n
+    parsePat (SSym "True")               = Right TrueP
+    parsePat (SSym "False")              = Right FalseP
+    parsePat (SSym "Nil")                = Right NilP
+    parsePat (SList [SSym "cons", h, t]) = do
       h' <- parsePat h
       t' <- parsePat t
       Right $ ConsP h' t'
