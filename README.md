@@ -26,12 +26,12 @@ Actually, quite a few reasons:
 
 Usually, one would write "hello world" in order to get a bare program going. 
 Unfortunately, Farnsworth has no IO.
-So insteand, this tour will cover some of the basics in the language.
+So instead, this tour will cover some of the basics in the language.
 
 ### 🌸 Examples
 
 Examples can be found in the [samples](samples) directory.
-They are bare minimal though, so for a better reference refer to this.
+They are minimal though, so for a better reference refer to this document.
 
 ### 💢 Expressions and Structure
 
@@ -84,6 +84,8 @@ The parentheses mimicking a function call are required.
 (- 1)
 (- (- 1))
 ```
+
+Note: the space here is required, as `-1` is a valid identifier.
 
 ### 2️⃣ Binary Operations
 
