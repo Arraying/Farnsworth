@@ -4,7 +4,7 @@ Good news, everyone!
 Farnsworth is a toy S-List language that (hopefully one day) can be used to solve problems productively.
 This language probably shouldn't be taken too seriously.
 
-## Features
+## 🧰 Features
 
 These sweet zombie Jesus features are subject to change:
 * Purely functional, everything is a function, no mutability.
@@ -13,7 +13,7 @@ These sweet zombie Jesus features are subject to change:
 * Pattern matching.
 * Can run files as well as a budget REPL.
 
-## But Why?
+## ⁉️ But Why?
 
 Actually, quite a few reasons:
 * Primarily learning: to get more experience in programming language theory (and retain the experience I already have).
@@ -22,29 +22,29 @@ Actually, quite a few reasons:
 * It's fun to write programming languages and make decisions you know you will both regret down the road and be judged for by other opinionated programmers.
 * All the cool people seem to have their own toy language these days...
 
-## A Tour
+## 💼 A Tour
 
 Usually, one would write "hello world" in order to get a bare program going. 
 Unfortunately, Farnsworth has no IO.
 So insteand, this tour will cover some of the basics in the language.
 
-### Examples
+### 🌸 Examples
 
 Examples can be found in the [samples](samples) directory.
 They are bare minimal though, so for a better reference refer to this.
 
-### Expressions and Structure
+### 💢 Expressions and Structure
 
 Everything in Farnsworth is an expression, which I find pretty neat.
 Farnsworth can be run in its REPL or by providing a file.
 Both should be just a single expression.
 
-### Typing
+### ⌨️ Typing
 
 Currently, Farnsworth is dynamically typed, so the programmer is relied upon to ensure type safety.
 There are plans to change this in the future.
 
-### Primitives
+### 🔢 Primitives
 
 There are three built-in primitives: numbers (positive literals only), booleans (true/false) and lists.
 
@@ -74,7 +74,7 @@ Nil
 Lists can be constructed either through `cons` or `list`.
 There is no differnce between the two: `list` gets desugared into `cons`.
 
-### Unary Operations
+### 1️⃣ Unary Operations
 
 There is currently a single unary operation, `-`. 
 This negates a number.
@@ -85,7 +85,7 @@ The parentheses mimicking a function call are required.
 (- (- 1))
 ```
 
-### Binary Operations
+### 2️⃣ Binary Operations
 
 There is also a single binary operation, `cons`. 
 This has been seen in the examples above, but is again shown here:
@@ -96,7 +96,7 @@ This has been seen in the examples above, but is again shown here:
 The last element of the list must be `Nil`.
 Due to dynamic typing, this will not be enforced, but the behaviour is undefined if this is not the case.
 
-### Conditionals
+### ❔ Conditionals
 
 There is only one conditional: `if`, which takes in a condition and two branches, one for if the condition is true, and another for if it is false.
 
@@ -107,7 +107,7 @@ There is only one conditional: `if`, which takes in a condition and two branches
 
 The condition must evaluate to a boolean, again, this is not enforced statically.
 
-### Functions
+### 🎰 Functions
 
 There are two types of functions in Farnsworth: named and anonymous functions. 
 Named functions have the ability to recursively call themselves, something that anonymous functions cannot do. 
@@ -161,7 +161,7 @@ Assuming this is now bound to the identifier `add100`, it can then be used as fo
 (add100 19)
 ```
 
-### Pattern Matching
+### 📇 Pattern Matching
 
 Pattern matching can be used to elegantly define how an expression will be evaluated.
 All primitives can be matched against, and a special binding pattern can be used to extract the value.
@@ -219,7 +219,7 @@ In this example, the `y` pattern will always match, but also be injected into th
       (cons (f a) (map f b))))))
 ```
 
-### Laziness
+### 😴 Laziness
 
 Farnsworth is lazy in its call-by-name evaluation strategy.
 Computations are deferred (placed into thunks) until the absolute last minute.
@@ -259,7 +259,7 @@ Coming back to lists, `Thunk : Thunk` is not particularly useful output. In orde
 (force (list 1 2 3 4 5 6))
 ```
 
-## Standard Library
+## 📚 Standard Library
 
 The standard libary is so minimal it should probably be called a standard bookshelf.
 I plan on expanding it, eventually, but until then there's really just the basics.
@@ -302,7 +302,7 @@ As a reminder, all functions can be curried.
 | `cons_` | any | nil or list | list | Curried version of `cons`. |
 
 
-## Conventions
+## 😊 Conventions
 
 Farnsworth files should be in a `.farn` file that has an UpperCamelCase name.
 Function names and other identifiers (parameters, case identifiers, etc.) should be lowerCamelCase.
@@ -311,7 +311,7 @@ Functions that return a boolean should be suffixed with `?`. Functions that perf
 Indentation and whitespace is up to the user.
 It should be mentioned that not all whitespace can be ignored, since for example `(:123)` is not equivalent to `(: 123)`.s
 
-## License
+## ⚖️ License
 
 Copyright Paul Hübner (c) 2023
 
