@@ -6,7 +6,7 @@ import qualified Data.Map                     as Map
 import           Interpreting.Arithmetic
 import           Interpreting.Lists
 import           Interpreting.Logic
-import           Interpreting.NativeFunctions (function0, function1, function2)
+import           Interpreting.NativeFunctions (function0, function1, function1', function2)
 import           Language                     (Environment, Stricter,
                                                Value (..))
 
@@ -15,6 +15,7 @@ standardLibraryEnvironment strict = Map.fromList
     [ ("best-number", function0 $ Right $ NumV 19) -- My favourite number!
     , ("id", f1 (\x -> Right x))
     , ("!", f1 not')
+    , ("force", f1' force)
     , ("head", f1 head')
     , ("tail", f1 tail')
     , ("nil?", f1 isNil)
@@ -34,4 +35,5 @@ standardLibraryEnvironment strict = Map.fromList
     , ("cons_", f2 curriedCons) ]
   where
     f1 = function1 strict
+    f1' = function1' strict
     f2 = function2 strict

@@ -1,10 +1,7 @@
-(
-  (fn map (f l)
-    (if (nil? l)
-      Nil
-      (cons (f (head l)) (doubleList (tail l)))
-    )
-  )
+(force ((fn map (f l)
+    (match l 
+      (case Nil Nil)
+      (case (cons h t) 
+        (cons (f h) (map f t)))))
   (\ (x) (* 2 x))
-  (list 1 2 3 4 5)
-)
+  (list 1 2 3 4 5)))

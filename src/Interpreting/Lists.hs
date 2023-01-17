@@ -1,5 +1,6 @@
 module Interpreting.Lists
     ( curriedCons
+    , force
     , head'
     , isList
     , isNil
@@ -7,7 +8,14 @@ module Interpreting.Lists
     ) where
 
 import           Errors   (FWError (..))
-import           Language (Value (..))
+import           Language (Value (..), Stricter)
+
+force :: Stricter -> Value -> Either FWError Value
+force s (ConsV l r) = do
+  l' <- s l >>= force s
+  r' <- s r >>= force s
+  Right $ ConsV l' r'
+force _ v           = Right v
 
 head' :: Value -> Either FWError Value
 head' (ConsV l _) = Right l

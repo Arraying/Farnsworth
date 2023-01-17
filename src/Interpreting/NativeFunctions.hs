@@ -1,6 +1,7 @@
 module Interpreting.NativeFunctions
     ( function0
     , function1
+    , function1'
     , function2
     ) where
 
@@ -19,6 +20,9 @@ function1 strict f = FunctionV (LambdaC (Just "1") $ NativeC $ EnvNativeFunction
     worker env = do
       e <- envV "1" env >>= strict
       f e
+
+function1' :: Stricter -> (Stricter -> Value -> Either FWError Value) -> Value
+function1' strict f = function1 strict $ f strict
 
 function2 :: Stricter -> (Value -> Value -> Either FWError Value) -> Value
 function2 strict f = FunctionV (LambdaC (Just "1") $ LambdaC (Just "2") $ NativeC $ EnvNativeFunction worker) empty
