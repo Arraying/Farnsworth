@@ -38,6 +38,8 @@ library
       Language
       Parsing.Parser
       Parsing.SExpr
+      Typing.TypeChecker
+      Typing.Types
   other-modules:
       Paths_Farnsworth
   hs-source-dirs:

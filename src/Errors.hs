@@ -8,6 +8,7 @@ data FWError
   = FWParseError ParseError
   | FWSyntaxError String
   | FWDesugError String
+  | FWTypeError String
   | FWInterpError String
 
 instance Show FWError where
