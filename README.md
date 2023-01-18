@@ -22,6 +22,15 @@ Actually, quite a few reasons:
 * It's fun to write programming languages and make decisions you know you will both regret down the road and be judged for by other opinionated programmers.
 * All the cool people seem to have their own toy language these days...
 
+## 📦 Installation & Usage
+
+1. Install GHCup, and install Haskell, Cabal and Stack.
+2. Clone this repository.
+3. Run `stack build` to compile the project.
+4. Use `stack exec Farnsworth-exe` or `stack exec Farnsworth-exe file.farn` to open the REPL or run a file, respectively.
+
+**Note:** Binary installation and/or distribution will be provided at a later date.
+
 ## 💼 A Tour
 
 Usually, one would write "hello world" in order to get a bare program going. 
@@ -85,7 +94,7 @@ The parentheses mimicking a function call are required.
 (- (- 1))
 ```
 
-Note: the space here is required, as `-1` is a valid identifier.
+**Note:** the space here is required, as `-1` is a valid identifier.
 
 ### 2️⃣ Binary Operations
 
@@ -311,7 +320,7 @@ Function names and other identifiers (parameters, case identifiers, etc.) should
 Functions that return a boolean should be suffixed with `?`. Functions that perform side-effects (in the future!) should be suffixed with `!`.
 
 Indentation and whitespace is up to the user.
-It should be mentioned that not all whitespace can be ignored, since for example `(:123)` is not equivalent to `(: 123)`.s
+It should be mentioned that not all whitespace can be ignored, since for example `(:123)` is not equivalent to `(: 123)`.
 
 ## ⚖️ License
 
