@@ -3,7 +3,7 @@ module Interpreting.Interpreter
     ) where
 
 import qualified Data.Map                     as Map
-import           Errors
+import           Errors                       (FWError (..))
 import           Interpreting.StandardLibrary (standardLibraryEnvironment)
 import           Language                     (Environment, ExprC (..),
                                                NativeFunction (..), Pat (..),
@@ -43,7 +43,7 @@ treewalk (MatchC u xs) env = do
         Nothing     -> findCase u' xs'
     match :: Environment -> Value -> Pat -> Either FWError (Maybe Environment)
     match env' u' pat = case (pat, u') of
-      (NumP l, NumV r)         -> if (l == r) then noChange else Right Nothing
+      (NumP l, NumV r)         -> if l == r then noChange else Right Nothing
       (TrueP, BoolV True)      -> noChange
       (FalseP, BoolV False)    -> noChange
       (NilP, NilV)             -> noChange
@@ -70,7 +70,7 @@ treewalk (AppC a b) env = do
         (Nothing, Nothing)    -> treewalk b' clos
         (Just a'', Just b''') -> treewalk b' $ Map.insert a'' b''' clos
         _                     -> Left $ FWInterpError "Arity mismatch in function application"
-    x                                -> Left $ FWInterpError ("Cannot invoke as function: " ++ (show x))
+    x                                -> Left $ FWInterpError ("Cannot invoke as function: " ++ show x)
   where
     arg :: Maybe ExprC -> Either FWError (Maybe Value)
     arg Nothing    = Right Nothing
@@ -84,4 +84,4 @@ bindResolve s env = case Map.lookup s env of
 
 strict :: Value -> Either FWError Value
 strict (ThunkV e env) = treewalk e env >>= strict
-strict v              = Right $ v
+strict v              = Right v

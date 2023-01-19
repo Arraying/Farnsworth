@@ -4,7 +4,7 @@ module Desugaring.Desugarer
     ) where
 
 import           Desugaring.Lambdas (curryApplication, curryLambda, namedLambda)
-import           Errors
+import           Errors             (FWError (..))
 import           Language           (ExprC (..), ExprExt (..), Pat)
 
 desugar :: ExprExt -> Either FWError ExprC
@@ -50,5 +50,4 @@ desugar (AppExt x xs) = do
 desugar e               = Left $ FWDesugError $ show e
 
 list :: [ExprC] -> ExprC
-list []     = NilC
-list (x:xs) = ConsC x $ list xs
+list = foldr ConsC NilC

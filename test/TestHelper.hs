@@ -1,10 +1,12 @@
-module TestHelper (FWTest(..)) where
+module TestHelper
+    ( FWTest (..)
+    ) where
 
-import Errors (FWError)
-import Test.HUnit (Assertable(assert), assertBool, assertEqual)
+import           Errors     (FWError)
+import           Test.HUnit (Assertable (assert), assertBool, assertEqual)
 
-data FWTest a 
-  = Pass a (Either FWError a) 
+data FWTest a
+  = Pass a (Either FWError a)
   | Fail (Either FWError a)
 
 instance (Eq a, Show a) => Assertable (FWTest a) where

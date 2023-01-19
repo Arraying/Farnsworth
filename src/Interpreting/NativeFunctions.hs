@@ -11,7 +11,7 @@ import           Language (Environment, ExprC (..), NativeFunction (..),
                            Stricter, Value (..))
 
 function0 :: Either FWError Value -> Value
-function0 e = FunctionV (LambdaC Nothing $ NativeC $ EnvNativeFunction (\_ -> e)) empty
+function0 e = FunctionV (LambdaC Nothing $ NativeC $ EnvNativeFunction (const e)) empty
 
 function1 :: Stricter -> (Value -> Either FWError Value) -> Value
 function1 strict f = FunctionV (LambdaC (Just "1") $ NativeC $ EnvNativeFunction worker) empty

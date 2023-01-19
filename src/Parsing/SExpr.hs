@@ -6,8 +6,7 @@ module Parsing.SExpr
 import           Control.Applicative    (many, (<|>))
 import           Control.Monad          (void)
 import           Data.Char              (isDigit, isLetter)
-import           Data.List              (intercalate)
-import           Errors
+import           Errors                 (FWError (..))
 import qualified Text.Parsec            as P
 import qualified Text.Parsec.Char       as Char
 import qualified Text.Parsec.Combinator as Comb
@@ -24,7 +23,7 @@ data SExpr
 instance Show SExpr where
   show (SNum n)  = show n
   show (SSym s)  = s
-  show (SList l) = "(" ++ (intercalate " " (map show l)) ++ ")"
+  show (SList l) = "(" ++ unwords (map show l) ++ ")"
 
 expr :: Parser SExpr
 expr = num <|> sym <|> list
@@ -52,7 +51,7 @@ list = do
   return $ SList e
 
 parseStr :: String -> Either FWError SExpr
-parseStr str = mapLeft (\e -> FWParseError e) $ P.parse ((whitespace *> expr) <* Comb.eof) "" str
+parseStr str = mapLeft FWParseError $ P.parse ((whitespace *> expr) <* Comb.eof) "" str
 
 whitespace :: Parser ()
 whitespace = void $ many $ Char.oneOf " \n\t"

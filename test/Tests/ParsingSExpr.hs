@@ -1,8 +1,10 @@
-module Tests.ParsingSExpr (tests) where
+module Tests.ParsingSExpr
+    ( tests
+    ) where
 
-import Parsing.SExpr (SExpr(..), parseStr)
-import Test.HUnit (Assertable(assert), Test(..))
-import TestHelper (FWTest(..))
+import           Parsing.SExpr (SExpr (..), parseStr)
+import           Test.HUnit    (Assertable (assert), Test (..))
+import           TestHelper    (FWTest (..))
 
 tests :: Test
 tests = TestList

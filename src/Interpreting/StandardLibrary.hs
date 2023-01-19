@@ -3,17 +3,20 @@ module Interpreting.StandardLibrary
     ) where
 
 import qualified Data.Map                     as Map
-import           Interpreting.Arithmetic
-import           Interpreting.Lists
-import           Interpreting.Logic
-import           Interpreting.NativeFunctions (function0, function1, function1', function2)
+import           Interpreting.Arithmetic      (divide, minus, multiply, plus)
+import           Interpreting.Lists           (curriedCons, force, head',
+                                               isList, isNil, tail')
+import           Interpreting.Logic           (and', eq, gt, gte, lt, lte, neq,
+                                               not', or')
+import           Interpreting.NativeFunctions (function0, function1, function1',
+                                               function2)
 import           Language                     (Environment, Stricter,
                                                Value (..))
 
 standardLibraryEnvironment :: Stricter -> Environment
 standardLibraryEnvironment strict = Map.fromList
     [ ("best-number", function0 $ Right $ NumV 19) -- My favourite number!
-    , ("id", f1 (\x -> Right x))
+    , ("id", f1 Right)
     , ("!", f1 not')
     , ("force", f1' force)
     , ("head", f1 head')

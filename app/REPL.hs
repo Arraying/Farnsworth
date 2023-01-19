@@ -23,4 +23,4 @@ replEval :: String -> Either FWError Value
 replEval = run
 
 replPrint :: Either FWError Value ->  IO ()
-replPrint e = either print print e
+replPrint = either print print

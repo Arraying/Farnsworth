@@ -25,9 +25,9 @@ data Value
 
 instance Show Value where
   show (NumV n)        = show n
-  show (NilV)          = "Nil"
+  show NilV            = "Nil"
   show (BoolV b)       = show b
-  show (ConsV l r)     = (show l) ++ " : " ++ (show r)
+  show (ConsV l r)     = show l ++ " : " ++ show r
   show (FunctionV _ _) = "Function"
   show (ThunkV _ _)    = "Thunk"
 

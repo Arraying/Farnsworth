@@ -1,10 +1,12 @@
-module Tests.ParsingExt (tests) where
+module Tests.ParsingExt
+    ( tests
+    ) where
 
-import Language (ExprExt(..), Pat(..))
-import Parsing.Parser (parseSExpr)
-import Parsing.SExpr (parseStr)
-import Test.HUnit (Assertable(assert), Test(..))
-import TestHelper (FWTest(..))
+import           Language       (ExprExt (..), Pat (..))
+import           Parsing.Parser (parseSExpr)
+import           Parsing.SExpr  (parseStr)
+import           Test.HUnit     (Assertable (assert), Test (..))
+import           TestHelper     (FWTest (..))
 
 tests :: Test
 tests = TestList

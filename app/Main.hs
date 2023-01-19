@@ -2,8 +2,8 @@ module Main
     ( main
     ) where
 
-import           REPL
-import           System.Environment
+import           REPL               (repl, replEval, replPrint)
+import           System.Environment (getArgs)
 
 main :: IO ()
 main = do

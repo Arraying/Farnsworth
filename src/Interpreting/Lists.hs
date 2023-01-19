@@ -8,7 +8,7 @@ module Interpreting.Lists
     ) where
 
 import           Errors   (FWError (..))
-import           Language (Value (..), Stricter)
+import           Language (Stricter, Value (..))
 
 force :: Stricter -> Value -> Either FWError Value
 force s (ConsV l r) = do

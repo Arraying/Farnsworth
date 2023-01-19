@@ -5,7 +5,7 @@ module Parsing.Parser
 
 import           Errors        (FWError (..))
 import           Language      (ExprExt (..), Pat (..), binOps, reserved, unOps)
-import           Parsing.SExpr
+import           Parsing.SExpr (SExpr (..))
 
 parseSExpr :: SExpr -> Either FWError ExprExt
 parseSExpr (SNum n) = Right $ NumExt n
@@ -28,7 +28,7 @@ parseSExpr (SList [SSym "if", c, t, f]) = do
   t' <- parseSExpr t
   f' <- parseSExpr f
   Right $ IfExt c' t' f'
-parseSExpr e@(SList (SSym "if" : _)) = Left $ FWSyntaxError ("Invalid use of if: " ++ (show e))
+parseSExpr e@(SList (SSym "if" : _)) = Left $ FWSyntaxError ("Invalid use of if: " ++ show e)
 parseSExpr (SList (SSym "list" : xs)) = do
   xs' <- traverse parseSExpr xs
   Right $ ListExt xs'
@@ -42,7 +42,7 @@ parseSExpr (SList (SSym "match" : x : xs)) = do
       p' <- parsePat p
       e' <- parseSExpr e
       Right (p', e')
-    parseCase c                           = Left $ FWSyntaxError ("Malformed case: " ++ (show c))
+    parseCase c                           = Left $ FWSyntaxError ("Malformed case: " ++ show c)
     parsePat :: SExpr -> Either FWError Pat
     parsePat (SNum n)                    = Right $ NumP n
     parsePat (SSym "True")               = Right TrueP
@@ -54,17 +54,17 @@ parseSExpr (SList (SSym "match" : x : xs)) = do
       Right $ ConsP h' t'
     parsePat (SSym s) = Right $ IdP s
     parsePat pat = Left $ FWSyntaxError $ show pat
-parseSExpr e@(SList (SSym "match" : _)) = Left $ FWSyntaxError ("Malformed use of match: " ++ (show e))
+parseSExpr e@(SList (SSym "match" : _)) = Left $ FWSyntaxError ("Malformed use of match: " ++ show e)
 parseSExpr (SList [SSym "\\", SList a, b]) = do
   a' <- traverse argParser a
   b' <- parseSExpr b
   Right $ AnonFnExt a' b'
-parseSExpr e@(SList (SSym "\\" : _)) = Left $ FWSyntaxError ("Malformed use of \\: " ++ (show e))
+parseSExpr e@(SList (SSym "\\" : _)) = Left $ FWSyntaxError ("Malformed use of \\: " ++ show e)
 parseSExpr (SList [SSym "fn", SSym s, SList a, b]) = do
   a' <- traverse argParser a
   b' <- parseSExpr b
   Right $ NamedFnExt s a' b'
-parseSExpr e@(SList (SSym "fn" : _)) = Left $ FWSyntaxError ("Malformed use of fn: " ++ (show e))
+parseSExpr e@(SList (SSym "fn" : _)) = Left $ FWSyntaxError ("Malformed use of fn: " ++ show e)
 parseSExpr (SList (x:xs)) = do
   x' <- parseSExpr x
   xs' <- traverse parseSExpr xs
@@ -75,5 +75,5 @@ argParser :: SExpr -> Either FWError String
 argParser sexpr = do
   s <- parseSExpr sexpr
   case s of
-    IdExt(s') -> Right s'
-    _ -> Left $ FWSyntaxError ("Anonymous lambda argument needs to be string; found " ++ (show sexpr))
+    IdExt s' -> Right s'
+    _ -> Left $ FWSyntaxError ("Anonymous lambda argument needs to be string; found " ++ show sexpr)
