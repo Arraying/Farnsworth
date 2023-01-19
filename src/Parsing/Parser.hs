@@ -28,6 +28,7 @@ parseSExpr (SList [SSym "if", c, t, f]) = do
   t' <- parseSExpr t
   f' <- parseSExpr f
   Right $ IfExt c' t' f'
+parseSExpr e@(SList (SSym "if" : _)) = Left $ FWSyntaxError ("Invalid use of if: " ++ (show e))
 parseSExpr (SList (SSym "list" : xs)) = do
   xs' <- traverse parseSExpr xs
   Right $ ListExt xs'
@@ -53,14 +54,17 @@ parseSExpr (SList (SSym "match" : x : xs)) = do
       Right $ ConsP h' t'
     parsePat (SSym s) = Right $ IdP s
     parsePat pat = Left $ FWSyntaxError $ show pat
+parseSExpr e@(SList (SSym "match" : _)) = Left $ FWSyntaxError ("Malformed use of match: " ++ (show e))
 parseSExpr (SList [SSym "\\", SList a, b]) = do
   a' <- traverse argParser a
   b' <- parseSExpr b
   Right $ AnonFnExt a' b'
+parseSExpr e@(SList (SSym "\\" : _)) = Left $ FWSyntaxError ("Malformed use of \\: " ++ (show e))
 parseSExpr (SList [SSym "fn", SSym s, SList a, b]) = do
   a' <- traverse argParser a
   b' <- parseSExpr b
   Right $ NamedFnExt s a' b'
+parseSExpr e@(SList (SSym "fn" : _)) = Left $ FWSyntaxError ("Malformed use of fn: " ++ (show e))
 parseSExpr (SList (x:xs)) = do
   x' <- parseSExpr x
   xs' <- traverse parseSExpr xs

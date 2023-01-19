@@ -71,6 +71,7 @@ test-suite Farnsworth-test
   main-is: Spec.hs
   other-modules:
       TestHelper
+      Tests.ParsingExt
       Tests.ParsingSExpr
       Paths_Farnsworth
   hs-source-dirs:

@@ -45,7 +45,6 @@ data ExprC
   | LambdaC (Maybe String) ExprC
   | AppC ExprC (Maybe ExprC)
   | NativeC NativeFunction
-  deriving (Show)
 
 data NativeFunction
   -- Environment will always contain stricted values.
@@ -69,7 +68,7 @@ data ExprExt
   | AnonFnExt [String] ExprExt
   | NamedFnExt String [String] ExprExt
   | AppExt ExprExt [ExprExt]
-  deriving (Show)
+  deriving (Eq, Show)
 
 data Pat
   = NumP Integer
@@ -78,7 +77,7 @@ data Pat
   | NilP
   | ConsP Pat Pat
   | IdP String
-  deriving (Show)
+  deriving (Eq, Show)
 
 type Environment = Map String Value
 type Stricter = (Value -> Either FWError Value)
