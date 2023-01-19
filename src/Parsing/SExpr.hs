@@ -18,6 +18,7 @@ data SExpr
   = SNum Integer
   | SSym String
   | SList [SExpr]
+  deriving (Eq)
 
 -- Custom show instance to create friendly syntax when printing.
 instance Show SExpr where
