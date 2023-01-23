@@ -46,14 +46,18 @@ library
   build-depends:
       HUnit
     , base >=4.7 && <5
+    , byline
     , containers
+    , exceptions
     , parsec
+    , text
   default-language: Haskell2010
 
 executable Farnsworth-exe
   main-is: Main.hs
   other-modules:
       REPL
+      REPL2
       Paths_Farnsworth
   hs-source-dirs:
       app
@@ -62,8 +66,11 @@ executable Farnsworth-exe
       Farnsworth
     , HUnit
     , base >=4.7 && <5
+    , byline
     , containers
+    , exceptions
     , parsec
+    , text
   default-language: Haskell2010
 
 test-suite Farnsworth-test
@@ -81,6 +88,9 @@ test-suite Farnsworth-test
       Farnsworth
     , HUnit
     , base >=4.7 && <5
+    , byline
     , containers
+    , exceptions
     , parsec
+    , text
   default-language: Haskell2010

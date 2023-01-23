@@ -3,11 +3,25 @@
 # For more information, please see the documentation at:
 #   https://docs.haskellstack.org/en/stable/lock_files
 
-packages: []
+packages:
+- completed:
+    hackage: byline-1.1.2@sha256:e218fe8aba9ef3aaec04bc76bb6ce9427f4065b75189ea8835a8ae51a83caf4c,5734
+    pantry-tree:
+      sha256: af0737224c86fc1dd8602da89a92d5f2036944fbf74ee452a448bf465764add6
+      size: 1447
+  original:
+    hackage: byline-1.1.2@sha256:e218fe8aba9ef3aaec04bc76bb6ce9427f4065b75189ea8835a8ae51a83caf4c,5734
+- completed:
+    hackage: terminfo-hs-0.2.1.1@sha256:c193c5333a18ad030c146c2282dd3828e670af344fbfdbcb681dbf6abd99ca1c,1629
+    pantry-tree:
+      sha256: 798e6dea1a4a006f2f3949dddb5bd3feb78e6347dd77c5ad97b2446b0060be82
+      size: 602
+  original:
+    hackage: terminfo-hs-0.2.1.1@sha256:c193c5333a18ad030c146c2282dd3828e670af344fbfdbcb681dbf6abd99ca1c,1629
 snapshots:
 - completed:
+    sha256: 4905c93319aa94aa53da8f41d614d7bacdbfe6c63a8c6132d32e6e62f24a9af4
     size: 649315
     url: https://raw.githubusercontent.com/commercialhaskell/stackage-snapshots/master/lts/20/6.yaml
-    sha256: 4905c93319aa94aa53da8f41d614d7bacdbfe6c63a8c6132d32e6e62f24a9af4
   original:
     url: https://raw.githubusercontent.com/commercialhaskell/stackage-snapshots/master/lts/20/6.yaml

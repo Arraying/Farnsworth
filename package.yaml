@@ -24,6 +24,9 @@ dependencies:
 - containers
 - parsec
 - HUnit
+- byline
+- exceptions
+- text
 
 ghc-options:
 - -Wall
