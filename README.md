@@ -63,6 +63,18 @@ There are three built-in primitives: numbers (positive literals only), booleans 
 1
 ```
 
+**Characters:**
+
+```lisp
+'a'
+```
+
+**Strings:**
+
+```lisp
+"foo"
+```
+
 **Booleans:**
 
 ```lisp
@@ -82,6 +94,10 @@ Nil
 
 Lists can be constructed either through `cons` or `list`.
 There is no differnce between the two: `list` gets desugared into `cons`.
+
+Strings are just lists of characters. 
+The string literalys (`"like this"`) are merely syntactic sugar.
+A null terminator is not required, since all `cons` end with a `Nil` anyway.
 
 ### 1️⃣ Unary Operations
 
@@ -197,6 +213,14 @@ Similarly, cases for booleans and empty lists can be made.
 These are `True` and `False`, as well as `Nil`.
 Thus, their patterns are the same as the primitive value literals.
 
+Characters can be matched like numbers:
+
+```lisp
+(match x
+  (case 'a' 1)
+  (case 'b' 2))
+```
+
 Lists can be matched with a special `cons` pattern.
 In order for a list to match, both the head and tail have to match the pattern.
 An example:
@@ -208,6 +232,24 @@ An example:
 ```
 
 Here, the first case would only match `Nil` (or `(list)`), and the second only `(cons 1 Nil)` (or `(list 1)`).
+
+since strings are just lists of characters, special syntactic sugar is added. 
+The below examples are equivalent:
+
+```lisp
+(match x
+  (case "" 0)
+  (case "a" 1)
+  (case "ab" 2))
+```
+
+```lisp
+(match x
+  (case Nil 0)
+  (case (cons 'a' Nil) 1)
+  (case (cons 'a' (cons 'b' Nil)) 2))
+```
+
 
 Binds can be used to give extra power to matches.
 They are denoted as identifiers, just like function parameters.
@@ -293,6 +335,8 @@ As a reminder, all functions can be curried.
 | `tail` | nonempty list | any | Returns the tail of the list. |
 | `nil?` | list | boolean | Returns true iff the list is empty. |
 | `list?` | any | boolean | Returns true iff the argument is a list. |
+| `upper` | char | char | Returns the character in upper case. |
+| `lower` | char | char | Returns the character in lower case. |
 
 **Arity 2 Functions:**
 
