@@ -45,10 +45,14 @@ data ExprC
   | LambdaC (Maybe String) ExprC
   | AppC ExprC (Maybe ExprC)
   | NativeC NativeFunction
+  deriving (Eq, Show)
 
 data NativeFunction
   -- Environment will always contain stricted values.
   = EnvNativeFunction (Environment -> Either FWError Value)
+
+instance Eq NativeFunction where
+  (==) _ _ = True -- Not needed for basic unit tests.
 
 instance Show NativeFunction where
   show (EnvNativeFunction _) = "<ENF>"

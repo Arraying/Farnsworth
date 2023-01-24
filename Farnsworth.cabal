@@ -78,6 +78,7 @@ test-suite Farnsworth-test
   main-is: Spec.hs
   other-modules:
       TestHelper
+      Tests.Desugaring
       Tests.ParsingExt
       Tests.ParsingSExpr
       Paths_Farnsworth
