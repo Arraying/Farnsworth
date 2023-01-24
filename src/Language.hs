@@ -17,6 +17,7 @@ import           Errors   (FWError (..))
 -- The actual values.
 data Value
   = NumV Integer
+  | CharV Char
   | NilV
   | BoolV Bool
   | ConsV Value Value
@@ -25,6 +26,7 @@ data Value
 
 instance Show Value where
   show (NumV n)        = show n
+  show (CharV c)       = show c
   show NilV            = "Nil"
   show (BoolV b)       = show b
   show (ConsV l r)     = show l ++ " : " ++ show r
@@ -34,6 +36,7 @@ instance Show Value where
 -- The core language syntax.
 data ExprC
   = NumC Integer
+  | CharC Char
   | NilC
   | TrueC
   | FalseC
@@ -60,6 +63,8 @@ instance Show NativeFunction where
 -- The extended language syntax.
 data ExprExt
   = NumExt Integer
+  | CharExt Char
+  | StrExt String
   | NilExt
   | TrueExt
   | FalseExt

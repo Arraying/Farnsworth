@@ -9,6 +9,8 @@ import           Language           (ExprC (..), ExprExt (..), Pat)
 
 desugar :: ExprExt -> Either FWError ExprC
 desugar (NumExt n)      = Right $ NumC n
+desugar (CharExt c)     = Right $ CharC c
+desugar (StrExt str)    = Right $ list $ map CharC str
 desugar NilExt          = Right NilC
 desugar TrueExt         = Right TrueC
 desugar FalseExt        = Right FalseC

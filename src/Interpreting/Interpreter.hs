@@ -18,6 +18,7 @@ interpretStdLib expr = treewalk expr (standardLibraryEnvironment strict)
 
 treewalk :: ExprC -> Environment -> Either FWError Value
 treewalk (NumC n) _ = Right $ NumV n
+treewalk (CharC c) _ = Right $ CharV c
 treewalk NilC _ = Right NilV
 treewalk TrueC _ = Right $ BoolV True
 treewalk FalseC _ = Right $ BoolV False

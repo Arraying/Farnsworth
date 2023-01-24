@@ -9,6 +9,8 @@ import           Parsing.SExpr (SExpr (..))
 
 parseSExpr :: SExpr -> Either FWError ExprExt
 parseSExpr (SNum n) = Right $ NumExt n
+parseSExpr (SChar c) = Right $ CharExt c
+parseSExpr (SStr s) = Right $ StrExt s
 parseSExpr (SSym "Nil") = Right NilExt
 parseSExpr (SSym "True") = Right TrueExt
 parseSExpr (SSym "False") = Right FalseExt

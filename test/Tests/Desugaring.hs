@@ -10,6 +10,8 @@ import           TestHelper           (FWTest (..))
 tests :: Test
 tests = TestList
   [ number
+  , char
+  , string
   , ident
   , boolean1
   , boolean2
@@ -32,6 +34,12 @@ tests = TestList
 
 number :: Test
 number = gw "Number" (NumC 1) (NumExt 1)
+
+char :: Test
+char = gw "Char" (CharC 'a') (CharExt 'a')
+
+string :: Test
+string = gw "String" (ConsC (CharC 'a') $ ConsC (CharC 'b') $ ConsC (CharC 'c') NilC) (StrExt "abc")
 
 ident :: Test
 ident = gw "Identifier" (IdC "fooBar") (IdExt "fooBar")

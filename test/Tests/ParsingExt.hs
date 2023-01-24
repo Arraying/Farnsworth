@@ -11,6 +11,8 @@ import           TestHelper     (FWTest (..))
 tests :: Test
 tests = TestList
     [ number
+    , char
+    , string
     , symbol
     , boolean1
     , boolean2
@@ -64,6 +66,12 @@ tests = TestList
 
 number :: Test
 number = gw "Number" (NumExt 1) "1"
+
+char :: Test
+char = gw "Char" (CharExt 'a') "'a'"
+
+string :: Test
+string = gw "String" (StrExt "hello, world!") "\"hello, world!\""
 
 symbol :: Test
 symbol = gw "Symbol" (IdExt "+") "+"
