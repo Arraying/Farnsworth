@@ -82,6 +82,7 @@ data ExprExt
 data Pat
   = NumP Integer
   | CharP Char
+  | StrP String
   | TrueP
   | FalseP
   | NilP

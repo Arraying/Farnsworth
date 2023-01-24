@@ -43,6 +43,8 @@ tests = TestList
     , match12
     , match13
     , match14
+    , match15
+    , match16
     , anon1
     , anon2
     , anon3
@@ -161,7 +163,13 @@ match13 :: Test
 match13 = bw "Match 13" "(match 1 (case 1 2 3))"
 
 match14 :: Test
-match14 = bw "Match 13" "(match 1 (case (list 1 2 3) 1))"
+match14 = bw "Match 14" "(match 1 (case (list 1 2 3) 1))"
+
+match15 :: Test
+match15 = gw "Match 15" (MatchExt TrueExt [(CharP 'a', NilExt)]) "(match True (case 'a' Nil))"
+
+match16 :: Test -- Before StrP desugaring.
+match16 = gw "Match 15" (MatchExt TrueExt [(StrP "ab", NilExt)]) "(match True (case \"ab\" Nil))"
 
 anon1 :: Test
 anon1 = gw "Anon 1" (AnonFnExt [] TrueExt) "(\\ () True)"

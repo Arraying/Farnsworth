@@ -61,8 +61,8 @@ treewalk (MatchC u xs) env = do
         r <- match env' t'' t
         case (l, r) of
           (Just l', Just r') -> Right $ Just $ Map.union (Map.union r' l') env'
-          (_, _)             -> Right $ Nothing
-      (_, _)                   -> Right Nothing
+          (_, _)             -> Right Nothing
+      (_, _)                   -> Right Nothing -- Note: StrP is not needed, already desugared.
       where
         noChange :: Either FWError (Maybe Environment)
         noChange = Right $ Just env'

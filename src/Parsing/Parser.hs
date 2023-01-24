@@ -48,6 +48,7 @@ parseSExpr (SList (SSym "match" : x : xs)) = do
     parsePat :: SExpr -> Either FWError Pat
     parsePat (SNum n)                    = Right $ NumP n
     parsePat (SChar c)                   = Right $ CharP c
+    parsePat (SStr s)                    = Right $ StrP s
     parsePat (SSym "True")               = Right TrueP
     parsePat (SSym "False")              = Right FalseP
     parsePat (SSym "Nil")                = Right NilP

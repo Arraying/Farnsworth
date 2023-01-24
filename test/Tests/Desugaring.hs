@@ -24,7 +24,10 @@ tests = TestList
   , cons5
   , if1
   , if2
-  , match
+  , match1
+  , match2
+  , match3
+  , match4
   , lambda1
   , lambda2
   , lambda3
@@ -77,8 +80,17 @@ if1 = gw "If 1" (IfC TrueC NilC (ConsC (NumC 1) NilC)) (IfExt TrueExt NilExt (Li
 if2 :: Test
 if2 = gw "If 2" (IfC TrueC (NumC 1) (NumC 2)) (IfExt TrueExt (NumExt 1) (NumExt 2))
 
-match :: Test
-match = gw "Match" (MatchC NilC [(NilP, NilC), (ConsP (IdP "h") (IdP "t"), NilC)]) (MatchExt NilExt [(NilP, NilExt), (ConsP (IdP "h") (IdP "t"), NilExt)])
+match1 :: Test
+match1 = gw "Match 1" (MatchC NilC [(NilP, NilC), (ConsP (IdP "h") (IdP "t"), NilC)]) (MatchExt NilExt [(NilP, NilExt), (ConsP (IdP "h") (IdP "t"), NilExt)])
+
+match2 :: Test
+match2 = gw "Match 2" (MatchC NilC [(NilP, NilC)]) (MatchExt NilExt [(StrP "", NilExt)])
+
+match3 :: Test
+match3 = gw "Match 3" (MatchC NilC [(ConsP (CharP 'a') NilP, NilC)]) (MatchExt NilExt [(StrP "a", NilExt)])
+
+match4 :: Test
+match4 = gw "Match 4" (MatchC NilC [(ConsP (CharP 'a') (ConsP (CharP 'b') NilP), NilC)]) (MatchExt NilExt [(StrP "ab", NilExt)])
 
 lambda1 :: Test
 lambda1 = gw "Lambda 1" (LambdaC Nothing NilC) (AnonFnExt [] NilExt)
