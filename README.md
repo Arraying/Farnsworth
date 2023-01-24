@@ -233,7 +233,7 @@ An example:
 
 Here, the first case would only match `Nil` (or `(list)`), and the second only `(cons 1 Nil)` (or `(list 1)`).
 
-since strings are just lists of characters, special syntactic sugar is added. 
+Since strings are just lists of characters, special syntactic sugar is added. 
 The below examples are equivalent:
 
 ```lisp
