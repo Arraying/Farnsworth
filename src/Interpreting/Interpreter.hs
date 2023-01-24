@@ -1,5 +1,6 @@
 module Interpreting.Interpreter
     ( interpret
+    , interpretStdLib
     ) where
 
 import qualified Data.Map                     as Map
@@ -10,7 +11,10 @@ import           Language                     (Environment, ExprC (..),
                                                Value (..))
 
 interpret :: ExprC -> Either FWError Value
-interpret expr = treewalk expr (standardLibraryEnvironment strict) >>= strict
+interpret expr = interpretStdLib expr >>= strict
+
+interpretStdLib :: ExprC -> Either FWError Value
+interpretStdLib expr = treewalk expr (standardLibraryEnvironment strict)
 
 treewalk :: ExprC -> Environment -> Either FWError Value
 treewalk (NumC n) _ = Right $ NumV n
