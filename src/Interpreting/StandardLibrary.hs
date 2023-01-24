@@ -4,6 +4,7 @@ module Interpreting.StandardLibrary
 
 import qualified Data.Map                     as Map
 import           Interpreting.Arithmetic      (divide, minus, multiply, plus)
+import           Interpreting.Charaters       (lower, upper)
 import           Interpreting.Lists           (curriedCons, force, head',
                                                isList, isNil, tail')
 import           Interpreting.Logic           (and', eq, gt, gte, lt, lte, neq,
@@ -23,6 +24,8 @@ standardLibraryEnvironment strict = Map.fromList
     , ("tail", f1 tail')
     , ("nil?", f1 isNil)
     , ("list?", f1 isList)
+    , ("upper", f1 upper)
+    , ("lower", f1 lower)
     , ("+", f2 plus)
     , ("-", f2 minus)
     , ("*", f2 multiply)

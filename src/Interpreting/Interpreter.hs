@@ -49,6 +49,7 @@ treewalk (MatchC u xs) env = do
     match :: Environment -> Value -> Pat -> Either FWError (Maybe Environment)
     match env' u' pat = case (pat, u') of
       (NumP l, NumV r)         -> if l == r then noChange else Right Nothing
+      (CharP l, CharV r)       -> if l == r then noChange else Right Nothing
       (TrueP, BoolV True)      -> noChange
       (FalseP, BoolV False)    -> noChange
       (NilP, NilV)             -> noChange

@@ -47,6 +47,7 @@ parseSExpr (SList (SSym "match" : x : xs)) = do
     parseCase c                           = Left $ FWSyntaxError ("Malformed case: " ++ show c)
     parsePat :: SExpr -> Either FWError Pat
     parsePat (SNum n)                    = Right $ NumP n
+    parsePat (SChar c)                   = Right $ CharP c
     parsePat (SSym "True")               = Right TrueP
     parsePat (SSym "False")              = Right FalseP
     parsePat (SSym "Nil")                = Right NilP

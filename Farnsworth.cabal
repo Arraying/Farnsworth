@@ -30,6 +30,7 @@ library
       Errors
       Farnsworth
       Interpreting.Arithmetic
+      Interpreting.Charaters
       Interpreting.Interpreter
       Interpreting.Lists
       Interpreting.Logic
